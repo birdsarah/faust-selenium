@@ -1,0 +1,14 @@
+name: faust-selenium
+channels:
+    - conda-forge
+dependencies:
+    - python=3.7
+    - geckodriver
+    - lz4
+    - jupyterlab
+    - pip
+    - python-snappy
+    - selenium
+    - sqlalchemy
+    - pip:
+        - "faust[dbrocks]"
