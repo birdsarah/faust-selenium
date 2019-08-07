@@ -19,6 +19,6 @@ async def crawl(crawl_requests):
             url=crawl_request.url,
             success=True
         )
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.5)
         print(f'Sending Result: {result.id}')
         await crawl_result_topic.send(value=result)
