@@ -1,0 +1,26 @@
+<html>
+    <body>
+    <p>Send Message</p>
+    <input id="msg"></input>
+    <button id="btn">Send</button>
+    </hr>
+    <p>Messages to appear here</p>
+    <ul></ul>
+    <script>
+        var ws = new WebSocket("ws://127.0.0.1:7799/"),
+            btn = document.getElementById('btn');
+        ws.onmessage = function (event) {
+            var messages = docment.getElementsByTagName('ul')[0],
+                message = document.createElement('li'),
+                content = document.createTextNode(event.data);
+            message.appendChild(content);
+            messages.appendChild(message);
+        };
+        btn.onclick = function (event) {
+            var input = document.getElementById('msg');
+            console.log(input.value);
+            ws.send(input.value);
+        };
+    </script>
+    </body>
+</html>
