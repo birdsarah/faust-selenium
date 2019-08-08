@@ -14,7 +14,7 @@ from app import (
 async def producer():
     with open('tranco_10k_alexa_10k_union.unlimited_depth_max_10_links.ranked.csv', 'r') as f:
         data = f.read()
-    data = data[0:83]  # Just testing for now
+    data = data[0:500]  # Just testing for now
 
     regex = r"(\d+),(.+)"
     matches = re.finditer(regex, data, re.MULTILINE)

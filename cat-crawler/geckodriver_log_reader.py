@@ -1,11 +1,4 @@
-import asyncio
 import os
-
-from app import (
-    app,
-    crawl_log_topic,
-    CrawlLog,
-)
 
 
 def tail_F(some_file):
@@ -36,14 +29,3 @@ def tail_F(some_file):
                         yield line + '\n'
         except IOError:
             yield ''
-
-
-@app.task
-async def geckodriver_log_reader():
-    # TODO
-    # - Work with multiple geckodriver.log files
-    for line in tail_F('geckodriver.log'):
-        if line != '':
-            await crawl_log_topic.send(value=CrawlLog(log=f'GECKODRIVER {line}'))
-        # Throttle the output so things don't go too fast. Seems fine.
-        await asyncio.sleep(0.2)
