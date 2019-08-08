@@ -21,10 +21,6 @@ class CrawlLog(faust.Record, serializer='json'):
 
 
 app = faust.App('crawler', broker='kafka://localhost:9092')
-crawl_request_topic = app.topic(
-    'crawl-request-12',
-    value_type=CrawlRequest,
-    partitions=3,
-)
+crawl_request_topic = app.topic('crawl-request', value_type=CrawlRequest)
 crawl_result_topic = app.topic('crawl-result', value_type=CrawlResult)
 crawl_log_topic = app.topic('crawl-log', value_type=CrawlLog)
