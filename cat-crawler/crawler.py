@@ -6,6 +6,7 @@ from app import (
     crawl_request_topic,
     crawl_result_topic,
     CrawlResult,
+    logger
 )
 
 
@@ -20,5 +21,5 @@ async def crawl(crawl_requests):
             success=True
         )
         await asyncio.sleep(0.2)
-        print(f'Sending Result: {result.id}')
+        logger.info(f'THIS IS A LOG: Sending Result: {result.id}')
         await crawl_result_topic.send(value=result)
