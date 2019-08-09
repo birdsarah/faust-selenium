@@ -10,5 +10,6 @@ dependencies:
     - python-snappy
     - selenium
     - sqlalchemy
+    - websockets
     - pip:
         - "faust[dbrocks]"

@@ -15,6 +15,7 @@ from app import (
 )
 from geckodriver_log_reader import tail_F
 
+
 # TODO
 # - Work with command line argument LOG FILE
 LOG_FILE = os.environ.get('GECKODRIVER_LOG_FILE', 'geckodriver.log')
