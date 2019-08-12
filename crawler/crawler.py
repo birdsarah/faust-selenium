@@ -1,4 +1,3 @@
-import asyncio
 import uuid
 
 from selenium.webdriver.support.ui import WebDriverWait
@@ -12,7 +11,6 @@ from app import (
     CrawlResult,
     logger
 )
-from geckodriver_log_reader import tail_F
 from browser_setup import LOG_FILE, get_driver
 
 DWELL_TIME_SECONDS = 2
@@ -53,13 +51,3 @@ async def crawl(crawl_requests):
             success=success,
         )
         await crawl_result_topic.send(value=result)
-
-
-@app.task
-async def geckodriver_log_reader():
-    # On startup start tailing the geckodriver log file and logging new lines
-    for line in tail_F(LOG_FILE):
-        if line != '':
-            logger.info(f'GECKODRIVER {line}')
-        # Throttle the output so things don't go too fast. Seems fine.
-        await asyncio.sleep(0.2)

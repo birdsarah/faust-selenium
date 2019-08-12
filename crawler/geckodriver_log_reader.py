@@ -1,4 +1,11 @@
+import asyncio
 import os
+
+from app import (
+    app,
+    logger,
+)
+from browser_setup import LOG_FILE
 
 
 def tail_F(some_file):
@@ -29,3 +36,13 @@ def tail_F(some_file):
                         yield line + '\n'
         except IOError:
             yield ''
+
+
+@app.task
+async def geckodriver_log_reader():
+    # On startup start tailing the geckodriver log file and logging new lines
+    for line in tail_F(LOG_FILE):
+        if line != '':
+            logger.info(f'GECKODRIVER {line}')
+        # Throttle the output so things don't go too fast. Seems fine.
+        await asyncio.sleep(0.2)

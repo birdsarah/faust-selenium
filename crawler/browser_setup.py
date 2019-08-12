@@ -1,10 +1,8 @@
 import json
 import os
-import shutil
 
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
-from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from selenium.webdriver.firefox.options import Options
 
 import configure_firefox
@@ -31,21 +29,6 @@ def get_driver(visit_id, crawl_id):
     # https://github.com/SeleniumHQ/selenium/issues/2106#issuecomment-320238039
     fo = Options()
 
-    # Clean profile-dir if any and setup profile dir
-    # profile_path = os.path.join(root_dir, 'firefox-profile')
-    # if os.path.isdir(profile_path):
-    #     shutil.rmtree(profile_path)
-    # os.makedirs(profile_path)
-    # profile = FirefoxProfile(profile_path)
-    # fo.profile = profile
-    # logger.info(f"OPENWPM: Browser Profile Path {profile_path}")
-
-    # Set the binary
-    binary_path = os.path.join(root_dir, 'firefox-bin', 'firefox-bin')
-    binary = FirefoxBinary(binary_path)
-    fo.binary = binary
-    logger.info(f"OPENWPM: Browser Binary Path {binary_path}")
-
     # Set various prefs to improve speed and eliminate traffic to Mozilla
     configure_firefox.optimize_prefs(fo, browser_params)
 
@@ -59,15 +42,16 @@ def get_driver(visit_id, crawl_id):
     if manager_params['testing']:
         fo.add_argument('-jsconsole')
 
+    # Set the binary
+    binary_path = os.path.join(root_dir, 'firefox-bin', 'firefox-bin')
+    fo.binary = binary_path
+    logger.info(f"OPENWPM: Browser Binary Path {binary_path}")
+
     # Launch the webdriver
-    driver = webdriver.Firefox(
-        firefox_binary=binary,
-        options=fo,
-        service_log_path=LOG_FILE
-    )
+    driver = webdriver.Firefox(options=fo, service_log_path=LOG_FILE)
 
     # Get profile
-    profile_path = driver.profile.path
+    profile_path = driver.capabilities['moz:profile']
     logger.info(f"OPENWPM: Browser Profile Path {profile_path}")
 
     # Set window size
