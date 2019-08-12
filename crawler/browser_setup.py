@@ -14,11 +14,14 @@ from app import logger
 LOG_FILE = os.environ.get('GECKODRIVER_LOG_FILE', 'geckodriver.log')
 
 
-def get_driver():
+def get_driver(visit_id, crawl_id):
     root_dir = os.path.dirname(os.path.abspath(__file__))
 
     browser_params = json.loads(open('browser_params.json').read())
     manager_params = json.loads(open('manager_params.json').read())
+
+    browser_params['visit_id'] = visit_id
+    browser_params['crawl_id'] = crawl_id
 
     # Use Options instead of FirefoxProfile to set preferences since the
     # Options method has no "frozen"/restricted options.
@@ -36,18 +39,10 @@ def get_driver():
         fo.add_argument('--width={}'.format(DEFAULT_SCREEN_RES[0]))
         fo.add_argument('--height={}'.format(DEFAULT_SCREEN_RES[1]))
 
-    # Write config file
-    extension_config = dict()
-    extension_config.update(browser_params)
-    extension_config['logger_address'] = ("127.0.0.1", 7799)
-    extension_config['aggregator_address'] = ("127.0.0.1", 7799)
-    extension_config['testing'] = manager_params['testing']
-
+    # Make profile
     fp = FirefoxProfile()
     browser_profile_path = fp.path + '/'
-    ext_config_file = browser_profile_path + 'browser_params.json'
-    with open(ext_config_file, 'w') as f:
-        json.dump(extension_config, f)
+    logger.info(f"OPENWPM: Browser Profile Path {browser_profile_path}")
 
     # Configure privacy settings
     configure_firefox.privacy(browser_params, fp, fo, root_dir, browser_profile_path)
@@ -58,7 +53,7 @@ def get_driver():
     # Set custom prefs. These are set after all of the default prefs to allow
     # our defaults to be overwritten.
     for name, value in browser_params['prefs'].items():
-        logger.info(f"BROWSER: Setting custom preference: {name} = {value}")
+        logger.info(f"OPENWPM: Setting custom preference: {name} = {value}")
         fo.set_preference(name, value)
 
     # Launch the webdriver
@@ -71,11 +66,23 @@ def get_driver():
         service_log_path=LOG_FILE
     )
 
-    # Add extension
+    # Set window size
+    driver.set_window_size(*profile_settings['screen_res'])
+
+    # Write extension config file
+    extension_config = dict()
+    extension_config.update(browser_params)
+    extension_config['logger_address'] = ("127.0.0.1", 7799)
+    extension_config['aggregator_address'] = ("127.0.0.1", 7799)
+    extension_config['testing'] = manager_params['testing']
+    ext_config_file = browser_profile_path + 'browser_params.json'
+    with open(ext_config_file, 'w') as f:
+        json.dump(extension_config, f)
+
+    # Load extension
     ext_loc = os.path.join(root_dir, 'openwpm.xpi')
     ext_loc = os.path.normpath(ext_loc)
     driver.install_addon(ext_loc, temporary=True)
-    logger.debug("BROWSER: OpenWPM Firefox extension loaded")
+    logger.info("OPENWPM: OpenWPM Firefox extension loaded")
 
-    # set window size
-    driver.set_window_size(*profile_settings['screen_res'])
+    return driver

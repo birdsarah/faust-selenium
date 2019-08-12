@@ -97,12 +97,12 @@ def optimize_prefs(fo):
     fo.set_preference("browser.slowStartup.notificationDisabled", True)
     fo.set_preference("browser.slowStartup.maxSamples", 0)
     fo.set_preference("browser.slowStartup.samples", 0)
-    fo.set_preference('extensions.checkCompatibility.nightly', False)
     fo.set_preference('browser.rights.3.shown', True)
     fo.set_preference("reader.parse-on-load.enabled", False)
     fo.set_preference('browser.pagethumbnails.capturing_disabled', True)
     fo.set_preference("browser.uitour.enabled", False)
     fo.set_preference("dom.flyweb.enabled", False)
+    fo.set_preference('extensions.checkCompatibility.nightly', False)
 
     # Disable health reports / telemetry / crash reports
     fo.set_preference("datareporting.policy.dataSubmissionEnabled", False)
@@ -207,3 +207,6 @@ def optimize_prefs(fo):
     # Enable legacy extensions and disable extension signing
     fo.set_preference("extensions.legacy.enabled", True)
     fo.set_preference("xpinstall.signatures.required", False)
+
+    # Disable screenshots (this doesn't seem to work!)
+    fo.set_preference("extensions.screenshots.disabled", True)

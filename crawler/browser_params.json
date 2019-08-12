@@ -6,9 +6,9 @@
     "navigation_instrument": true,
     "save_javascript": false,
     "save_all_content": false,
-    "crawl_id": 1,
     "headless": false,
-
+    "crawl_id": null,
+    "visit_id": null,
 
     "random_attributes": false,
     "bot_mitigation": false,
