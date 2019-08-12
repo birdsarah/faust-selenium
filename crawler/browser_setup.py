@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
@@ -9,6 +10,8 @@ from selenium.webdriver.firefox.options import Options
 import configure_firefox
 from app import logger
 
+
+DEFAULT_SCREEN_RES = (1366, 768)
 # TODO
 # - Work with command line argument LOG FILE
 LOG_FILE = os.environ.get('GECKODRIVER_LOG_FILE', 'geckodriver.log')
@@ -27,28 +30,24 @@ def get_driver(visit_id, crawl_id):
     # Options method has no "frozen"/restricted options.
     # https://github.com/SeleniumHQ/selenium/issues/2106#issuecomment-320238039
     fo = Options()
-    fo.set_preference('plugin.state.flash', 0)
 
-    DEFAULT_SCREEN_RES = (1366, 768)
+    # Clean profile-dir if any and setup profile dir
+    # profile_path = os.path.join(root_dir, 'firefox-profile')
+    # if os.path.isdir(profile_path):
+    #     shutil.rmtree(profile_path)
+    # os.makedirs(profile_path)
+    # profile = FirefoxProfile(profile_path)
+    # fo.profile = profile
+    # logger.info(f"OPENWPM: Browser Profile Path {profile_path}")
 
-    profile_settings = dict()
-    profile_settings['screen_res'] = DEFAULT_SCREEN_RES
-
-    if browser_params['headless']:
-        fo.set_headless(True)
-        fo.add_argument('--width={}'.format(DEFAULT_SCREEN_RES[0]))
-        fo.add_argument('--height={}'.format(DEFAULT_SCREEN_RES[1]))
-
-    # Make profile
-    fp = FirefoxProfile()
-    browser_profile_path = fp.path + '/'
-    logger.info(f"OPENWPM: Browser Profile Path {browser_profile_path}")
-
-    # Configure privacy settings
-    configure_firefox.privacy(browser_params, fp, fo, root_dir, browser_profile_path)
+    # Set the binary
+    binary_path = os.path.join(root_dir, 'firefox-bin', 'firefox-bin')
+    binary = FirefoxBinary(binary_path)
+    fo.binary = binary
+    logger.info(f"OPENWPM: Browser Binary Path {binary_path}")
 
     # Set various prefs to improve speed and eliminate traffic to Mozilla
-    configure_firefox.optimize_prefs(fo)
+    configure_firefox.optimize_prefs(fo, browser_params)
 
     # Set custom prefs. These are set after all of the default prefs to allow
     # our defaults to be overwritten.
@@ -56,18 +55,23 @@ def get_driver(visit_id, crawl_id):
         logger.info(f"OPENWPM: Setting custom preference: {name} = {value}")
         fo.set_preference(name, value)
 
+    manager_params['testing'] = True
+    if manager_params['testing']:
+        fo.add_argument('-jsconsole')
+
     # Launch the webdriver
-    firefox_binary_path = os.path.join(root_dir, 'firefox-bin', 'firefox-bin')
-    fb = FirefoxBinary(firefox_path=firefox_binary_path)
     driver = webdriver.Firefox(
-        firefox_profile=fp,
-        firefox_binary=fb,
-        firefox_options=fo,
+        firefox_binary=binary,
+        options=fo,
         service_log_path=LOG_FILE
     )
 
+    # Get profile
+    profile_path = driver.profile.path
+    logger.info(f"OPENWPM: Browser Profile Path {profile_path}")
+
     # Set window size
-    driver.set_window_size(*profile_settings['screen_res'])
+    driver.set_window_size(*DEFAULT_SCREEN_RES)
 
     # Write extension config file
     extension_config = dict()
@@ -75,7 +79,7 @@ def get_driver(visit_id, crawl_id):
     extension_config['logger_address'] = ("127.0.0.1", 7799)
     extension_config['aggregator_address'] = ("127.0.0.1", 7799)
     extension_config['testing'] = manager_params['testing']
-    ext_config_file = browser_profile_path + 'browser_params.json'
+    ext_config_file = os.path.join(profile_path, 'browser_params.json')
     with open(ext_config_file, 'w') as f:
         json.dump(extension_config, f)
 

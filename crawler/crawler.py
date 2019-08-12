@@ -15,7 +15,7 @@ from app import (
 from geckodriver_log_reader import tail_F
 from browser_setup import LOG_FILE, get_driver
 
-DWELL_TIME_SECONDS = 120
+DWELL_TIME_SECONDS = 2
 CRAWL_ID = (uuid.uuid4().int & (1 << 32) - 1) - 2**31
 
 

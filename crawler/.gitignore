@@ -1,4 +1,5 @@
 # app specific
 crawler-data/
 firefox-bin
+firefox-profile
 openwpm.xpi

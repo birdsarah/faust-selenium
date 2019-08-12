@@ -1,10 +1,16 @@
-import os
-import shutil
-
-EXT_STORAGE_DIR = 'browser-extension-data'
 
 
-def privacy(browser_params, fp, fo, root_dir, browser_profile_path):
+def optimize_prefs(fo, browser_params):
+    """
+    Disable various features and checks the browser will do on startup.
+    Some of these (e.g. disabling the newtab page) are required to prevent
+    extraneous data in the proxy.
+
+    Source of prefs:
+    * https://support.mozilla.org/en-US/kb/how-stop-firefox-making-automatic-connections
+    * https://github.com/pyllyukko/user.js/blob/master/user.js
+    """  # noqa
+
     """
     Configure the privacy settings in Firefox. This includes:
     * DNT
@@ -12,11 +18,6 @@ def privacy(browser_params, fp, fo, root_dir, browser_profile_path):
     * Tracking protection
     * Privacy extensions
     """
-
-    # Make extension storage directory
-    storage_dir = os.path.join(browser_profile_path, EXT_STORAGE_DIR)
-    if not os.path.isdir(storage_dir):
-        os.mkdir(storage_dir)
 
     # Turns on Do Not Track
     if browser_params['donottrack']:
@@ -30,68 +31,13 @@ def privacy(browser_params, fp, fo, root_dir, browser_profile_path):
     else:  # always allow third party cookies
         fo.set_preference("network.cookie.cookieBehavior", 0)
 
-    # Tracking Protection
-    if browser_params['tracking-protection']:
-        raise RuntimeError("Firefox Tracking Protection is not currently "
-                           "supported. See: "
-                           "https://github.com/citp/OpenWPM/issues/101")
+    # Headless
+    if browser_params['headless']:
+        fo.set_headless(True)
 
-    # AbBlock Plus
-    if browser_params['adblock-plus']:
-        raise RuntimeError("AdBlock Plus is not currently supported. See: "
-                           "https://github.com/citp/OpenWPM/issues/35")
+    # No flash
+    fo.set_preference('plugin.state.flash', 0)
 
-    # Ghostery
-    # Updated: 2017-10-7
-    if browser_params['ghostery']:
-        fp.add_extension(extension=os.path.join(
-            root_dir, 'firefox_extensions', 'ghostery',
-            'ghostery-7.3.3.7.xpi')
-        )
-        ghostery_dir = os.path.join(storage_dir, 'firefox@ghostery.com')
-        if not os.path.isdir(ghostery_dir):
-            os.mkdir(ghostery_dir)
-        shutil.copy(os.path.join(root_dir, 'firefox_extensions',
-                                 'ghostery', 'storage.js'), ghostery_dir)
-
-    # Disconnect
-    # Updated: 2017-10-7
-    if browser_params['disconnect']:
-        fp.add_extension(extension=os.path.join(
-            root_dir, 'firefox_extensions', 'disconnect-5.18.21.xpi'))
-
-    # Enable HTTPS Everywhere
-    # Updated: 2017-10-7
-    if browser_params['https-everywhere']:
-        fp.add_extension(extension=os.path.join(
-            root_dir, 'firefox_extensions',
-            'https_everywhere-2017.10.4.xpi'))
-
-    # uBlock Origin
-    # Updated: 2017-10-7
-    # Uses the default blocklists that ship with the XPI.
-    if browser_params['ublock-origin']:
-        fp.add_extension(extension=os.path.join(
-            root_dir, 'firefox_extensions', 'ublock_origin',
-            'ublock_origin-1.14.10.xpi')
-        )
-        ublock_dir = os.path.join(storage_dir, 'uBlock0@raymondhill.net')
-        if not os.path.isdir(ublock_dir):
-            os.mkdir(ublock_dir)
-        shutil.copy(os.path.join(root_dir, 'firefox_extensions',
-                                 'ublock_origin', 'storage.js'), ublock_dir)
-
-
-def optimize_prefs(fo):
-    """
-    Disable various features and checks the browser will do on startup.
-    Some of these (e.g. disabling the newtab page) are required to prevent
-    extraneous data in the proxy.
-
-    Source of prefs:
-    * https://support.mozilla.org/en-US/kb/how-stop-firefox-making-automatic-connections
-    * https://github.com/pyllyukko/user.js/blob/master/user.js
-    """  # noqa
     # Startup / Speed
     fo.set_preference('browser.shell.checkDefaultBrowser', False)
     fo.set_preference("browser.slowStartup.notificationDisabled", True)
@@ -116,8 +62,7 @@ def optimize_prefs(fo):
     fo.set_preference("browser.selfsupport.url", "")
     fo.set_preference("browser.tabs.crashReporting.sendReport", False)
     fo.set_preference("browser.crashReports.unsubmittedCheck.enabled", False)
-    fo.set_preference(
-        "dom.ipc.plugins.flash.subprocess.crashreporter.enabled", False)
+    fo.set_preference("dom.ipc.plugins.flash.subprocess.crashreporter.enabled", False)
 
     # Predictive Actions / Prefetch
     fo.set_preference("network.predictor.enabled", False)
@@ -154,26 +99,17 @@ def optimize_prefs(fo):
     fo.set_preference("browser.safebrowsing.downloads.enabled", False)
     fo.set_preference("browser.safebrowsing.downloads.remote.enabled", False)
     fo.set_preference("browser.safebrowsing.blockedURIs.enabled", False)
-    fo.set_preference(
-        "browser.safebrowsing.provider.mozilla.gethashURL", "")
-    fo.set_preference(
-        "browser.safebrowsing.provider.google.gethashURL", "")
-    fo.set_preference(
-        "browser.safebrowsing.provider.google4.gethashURL", "")
-    fo.set_preference(
-        "browser.safebrowsing.provider.mozilla.updateURL", "")
-    fo.set_preference(
-        "browser.safebrowsing.provider.google.updateURL", "")
-    fo.set_preference(
-        "browser.safebrowsing.provider.google4.updateURL", "")
-    fo.set_preference(
-        "browser.safebrowsing.provider.mozilla.lists", "")  # TP
-    fo.set_preference(
-        "browser.safebrowsing.provider.google.lists", "")  # TP
-    fo.set_preference(
-        "browser.safebrowsing.provider.google4.lists", "")  # TP
+    fo.set_preference("browser.safebrowsing.provider.mozilla.gethashURL", "")
+    fo.set_preference("browser.safebrowsing.provider.google.gethashURL", "")
+    fo.set_preference("browser.safebrowsing.provider.google4.gethashURL", "")
+    fo.set_preference("browser.safebrowsing.provider.mozilla.updateURL", "")
+    fo.set_preference("browser.safebrowsing.provider.google.updateURL", "")
+    fo.set_preference("browser.safebrowsing.provider.google4.updateURL", "")
+    fo.set_preference("browser.safebrowsing.provider.mozilla.lists", "")  # TP
+    fo.set_preference("browser.safebrowsing.provider.google.lists", "")  # TP
+    fo.set_preference("browser.safebrowsing.provider.google4.lists", "")  # TP
     fo.set_preference("extensions.blocklist.enabled", False)  # extensions
-    fo.set_preference('security.OCSP.enabled', 0)
+    fo.set_preference("security.OCSP.enabled", 0)
 
     # Disable Content Decryption Module and OpenH264 related downloads
     fo.set_preference("media.gmp-manager.url", "")
