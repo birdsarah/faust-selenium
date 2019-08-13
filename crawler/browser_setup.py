@@ -38,7 +38,6 @@ def get_driver(visit_id, crawl_id):
         logger.info(f"OPENWPM: Setting custom preference: {name} = {value}")
         fo.set_preference(name, value)
 
-    manager_params['testing'] = True
     if manager_params['testing']:
         fo.add_argument('-jsconsole')
 

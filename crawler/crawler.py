@@ -1,3 +1,4 @@
+import json
 import uuid
 
 from selenium.webdriver.support.ui import WebDriverWait
@@ -13,7 +14,8 @@ from app import (
 )
 from browser_setup import LOG_FILE, get_driver
 
-DWELL_TIME_SECONDS = 2
+manager_params = json.loads(open('manager_params.json').read())
+DWELL_TIME_SECONDS = manager_params['dwell_time']
 CRAWL_ID = (uuid.uuid4().int & (1 << 32) - 1) - 2**31
 
 

@@ -1,4 +1,7 @@
 <html>
+    <head>
+        <script src="fingerprint2.js"></script>
+    </head>
     <body>
     <p>Send Message</p>
     <input id="msg"></input>
@@ -21,6 +24,7 @@
             console.log(input.value);
             ws.send(input.value);
         };
+        console.log(Fingerprint2().getCanvasFp());
     </script>
     </body>
 </html>
