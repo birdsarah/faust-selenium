@@ -59,8 +59,7 @@ def get_driver(visit_id, crawl_id):
     # Write extension config file
     extension_config = dict()
     extension_config.update(browser_params)
-    extension_config['logger_address'] = ("127.0.0.1", 7799)
-    extension_config['aggregator_address'] = ("127.0.0.1", 7799)
+    extension_config['ws_address'] = ("127.0.0.1", 7799)
     extension_config['testing'] = manager_params['testing']
     ext_config_file = os.path.join(profile_path, 'browser_params.json')
     with open(ext_config_file, 'w') as f:
