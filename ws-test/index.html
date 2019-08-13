@@ -10,9 +10,10 @@
     <p>Messages to appear here</p>
     <ul></ul>
     <script>
-        var ws = new WebSocket("ws://127.0.0.1:7799/"),
+        var ws1 = new WebSocket("ws://127.0.0.1:7799/1"),
+            ws2 = new WebSocket("ws://127.0.0.1:7799/2"),
             btn = document.getElementById('btn');
-        ws.onmessage = function (event) {
+        ws1.onmessage = function (event) {
             var messages = docment.getElementsByTagName('ul')[0],
                 message = document.createElement('li'),
                 content = document.createTextNode(event.data);
@@ -21,8 +22,9 @@
         };
         btn.onclick = function (event) {
             var input = document.getElementById('msg');
-            console.log(input.value);
-            ws.send(input.value);
+            console.log('value', input.value);
+            ws1.send(['1', input.value]);
+            ws2.send(['2', input.value]);
         };
         console.log(Fingerprint2().getCanvasFp());
     </script>

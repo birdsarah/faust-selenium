@@ -12,9 +12,10 @@ from app import (
     CrawlResult,
     logger
 )
-from browser_setup import LOG_FILE, get_driver
+from browser_setup import get_driver
 
-manager_params = json.loads(open('manager_params.json').read())
+with open('manager_params.json', 'r') as f:
+    manager_params = json.loads(f.read())
 DWELL_TIME_SECONDS = manager_params['dwell_time']
 CRAWL_ID = (uuid.uuid4().int & (1 << 32) - 1) - 2**31
 

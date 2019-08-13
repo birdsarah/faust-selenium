@@ -38,8 +38,8 @@ def get_driver(visit_id, crawl_id):
         logger.info(f"OPENWPM: Setting custom preference: {name} = {value}")
         fo.set_preference(name, value)
 
-    if manager_params['testing']:
-        fo.add_argument('-jsconsole')
+    #if manager_params['testing']:
+    fo.add_argument('-jsconsole')
 
     # Set the binary
     binary_path = os.path.join(root_dir, 'firefox-bin', 'firefox-bin')
