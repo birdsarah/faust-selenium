@@ -24,7 +24,8 @@ class CrawlLog(faust.Record, serializer='json'):
 
 
 APPNAME = 'openwpm'
-app = faust.App(APPNAME, broker='kafka://localhost:9092')
+BROKER = 'kafka://192.168.43.34:9092'
+app = faust.App(APPNAME, broker=BROKER)
 crawl_request_topic = app.topic('crawl-request', value_type=CrawlRequest)
 crawl_result_topic = app.topic('crawl-result', value_type=CrawlResult)
 crawl_log_topic = app.topic('crawl-log', value_type=CrawlLog)

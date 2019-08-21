@@ -1,0 +1,12 @@
+name: faust-selenium-windows
+channels:
+    - conda-forge
+dependencies:
+    - python
+    - geckodriver
+    - pip
+    - selenium
+    - websockets
+    - multidict
+    - pip:
+      - faust

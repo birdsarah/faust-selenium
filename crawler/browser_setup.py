@@ -42,7 +42,7 @@ def get_driver(visit_id, crawl_id):
     fo.add_argument('-jsconsole')
 
     # Set the binary
-    binary_path = os.path.join(root_dir, 'firefox-bin', 'firefox-bin')
+    binary_path = "C:\\Users\\Bird\\firefox-bin\\firefox.exe"
     fo.binary = binary_path
     logger.info(f"OPENWPM: Browser Binary Path {binary_path}")
 

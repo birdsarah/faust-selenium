@@ -8,6 +8,6 @@
     "testing": false,
     "s3_bucket": null,
     "s3_directory": null,
-    "dwell_time": 120
+    "dwell_time": 10
 }
 

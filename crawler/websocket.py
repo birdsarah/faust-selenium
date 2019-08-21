@@ -9,6 +9,7 @@ from websockets.server import WebSocketServerProtocol
 from app import (
     logger,
     APPNAME,
+    BROKER,
 )
 
 
@@ -52,4 +53,4 @@ class Websockets(Service):
         await websockets.serve(self.on_messages, self.bind, self.port)
 
 
-app = WSApp(APPNAME)
+app = WSApp(APPNAME, broker=BROKER)
