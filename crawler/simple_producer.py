@@ -5,10 +5,9 @@ from urllib.parse import quote
 from app import (
     app,
     crawl_request_topic,
+    crawl_request_log_topic,
     CrawlRequest,
-    Session,
 )
-from datasaver_db import DBCrawlRequest
 
 
 simple_request_topic = app.topic('simple_request')
@@ -18,12 +17,9 @@ simple_request_topic = app.topic('simple_request')
 async def crawl_request(requests):
     async for request in requests:
         url = quote(request.get('url', 'http://www.google.com'), safe=":/?=")
-        req = CrawlRequest(id=str(uuid.uuid4()), url=url)
-        print(f'Sending Request: {req.url}')
-        session = Session()
-        request = DBCrawlRequest(id=req.id, url=req.url)
-        session.add(request)
-        session.commit()
-        session.close()
+        visit_id = (uuid.uuid4().int & (1 << 53) - 1) - 2**52
+        req = CrawlRequest(url=url, visit_id=visit_id, crawl_id='simple')
 
+        print(f'Sending Request: {req.url}')
+        await crawl_request_log_topic.send(value=req)
         await crawl_request_topic.send(value=req)

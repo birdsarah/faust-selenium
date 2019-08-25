@@ -11,17 +11,26 @@ Base = declarative_base()
 class DBCrawlRequest(Base):
     __tablename__ = 'crawl_requests'
 
-    id = Column(String(256), primary_key=True)
+    id = Column(Integer(), primary_key=True, auto_increment=True)
+    visit_id = Column(String(256), nullable=False)
+    crawl_id = Column(String(256), nullable=False)
     url = Column(Text(), nullable=False)
 
 
 class DBCrawlResult(Base):
     __tablename__ = 'crawl_results'
 
-    id = Column(String(256), primary_key=True)
-    request_id = Column(String(256), nullable=False)
-    url = Column(Text(), nullable=False)
+    id = Column(Integer(), primary_key=True, auto_increment=True)
+    visit_id = Column(String(256), nullable=False)
     success = Column(Boolean(), nullable=False)
+
+
+class DBWebExtStart(Base):
+    __tablename__ = 'webext_starts'
+
+    id = Column(Integer(), primary_key=True, auto_increment=True)
+    visit_id = Column(String(256), nullable=False)
+    crawl_id = Column(String(256), nullable=False)
 
 
 class DBLog(Base):

@@ -13,16 +13,20 @@ from datasaver_db import (
     Base
 )
 
+# ---------------------------------------------------------------------
+# Faust Records
+# ---------------------------------------------------------------------
+
+# TODO I think CrawlRequest should have a timestamp.
 
 class CrawlRequest(faust.Record, serializer='json'):
-    id: str
+    visit_id: str
+    crawl_id: str
     url: str
 
 
 class CrawlResult(faust.Record, serializer='json'):
-    id: str
-    request_id: str
-    url: str
+    visit_id: str
     success: bool
 
 
@@ -30,7 +34,13 @@ class CrawlLog(faust.Record, serializer='json'):
     log: str
 
 
+class WebExtStart(faust.Record, serializer='json'):
+    visit_id: str
+    crawl_id: str
+
+# ---------------------------------------------------------------------
 # Setup Logging
+# ---------------------------------------------------------------------
 
 class KafkaLogHandler(logging.StreamHandler):
 
@@ -90,6 +100,7 @@ crawl_request_topic = app.topic('crawl-request', value_type=CrawlRequest)
 crawl_request_log_topic = app.topic('crawl-request-log', value_type=CrawlRequest)
 crawl_result_topic = app.topic('crawl-result', value_type=CrawlResult)
 crawl_log_topic = app.topic('crawl-log', value_type=CrawlLog)
+webext_start_topic = app.topic('webext-start', value_type=WebExtStart)
 
 # Database
 engine = create_engine('sqlite:///crawldata.db')

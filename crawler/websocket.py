@@ -12,6 +12,8 @@ from app import (
     logger,
     APPNAME,
     BROKER,
+    WebExtStart,
+    webext_start_topic,
 )
 
 
@@ -35,8 +37,6 @@ class Websockets(Service):
         super().__init__(**kwargs)
 
     async def on_message(self, ws, message) -> None:
-        print(message)
-
         # Parse JSON message
         try:
             parsed = json.loads(message)
@@ -45,16 +45,18 @@ class Websockets(Service):
             return
 
         # Check it's from the WebExtension
-        message_components = parsed['_component'].split('::')
-        if message_components[0] != 'WebExtension':
-            logger.error('Non webextension message passed to websocket')
+        try:
+            _component = parsed.pop('_component')
+            message_components = _component.split('::')
+            assert message_components[0] == 'WebExtension'
+        except (KeyError, IndexError, AssertionError) as e:
+            logger.error('Message from webextension does not have valid _component attribute.')
+            logger.exception(e)
             return
 
         # Handle different types of message from WebExtension
         # These correspond with entries in Extension/firefox/logging.js
-        if message_components[1] == 'Start':
-            pass
-        elif message_components[1] == 'Log':
+        if message_components[1] == 'Log':
             record = LogRecord(
                 name='WebExtension',
                 level=parsed['level'],
@@ -65,6 +67,8 @@ class Websockets(Service):
                 exc_info=None,
             )
             logger.handle(record)
+        elif message_components[1] == 'Start':
+            await webext_start_topic.send(value=WebExtStart(**parsed))
         elif message_components[1] == 'Data':
             pass
         elif message_components[1] == 'Content':

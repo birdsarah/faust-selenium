@@ -17,20 +17,13 @@ from browser_setup import get_driver
 with open('manager_params.json', 'r') as f:
     manager_params = json.loads(f.read())
 DWELL_TIME_SECONDS = manager_params['dwell_time']
-CRAWL_ID = (uuid.uuid4().int & (1 << 32) - 1) - 2**31
 
 
 @app.agent(crawl_request_topic)
 async def crawl(crawl_requests):
-    # Do a crawl for each crawl request
     async for crawl_request in crawl_requests:
         print(f'Receiving Request: {crawl_request.url}')
-
-        # Do a crawl
-        visit_id = (uuid.uuid4().int & (1 << 53) - 1) - 2**52
-        crawl_result_id = str(uuid.uuid4()),
-
-        driver = get_driver(visit_id, CRAWL_ID)
+        driver = get_driver(crawl_request.visit_id, crawl_request.crawl_id)
 
         try:
             driver.get(crawl_request.url)
@@ -48,9 +41,7 @@ async def crawl(crawl_requests):
             driver.quit()
 
         result = CrawlResult(
-            id=crawl_result_id,
-            request_id=crawl_request.id,
-            url=crawl_request.url,
+            visit_id=crawl_request.visit_id,
             success=success,
         )
         await crawl_result_topic.send(value=result)

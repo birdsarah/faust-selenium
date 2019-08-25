@@ -8,9 +8,9 @@ from app import (
     crawl_request_topic,
     crawl_request_log_topic,
     CrawlRequest,
-    Session,
 )
-from datasaver_db import DBCrawlRequest
+
+CRAWL_ID = (uuid.uuid4().int & (1 << 32) - 1) - 2**31
 
 
 @app.task
@@ -26,14 +26,9 @@ async def producer():
         assert len(grouped) == 2
 
         url = quote(grouped[1], safe=":/?=")
-        req = CrawlRequest(id=str(uuid.uuid4()), url=url)
+        visit_id = (uuid.uuid4().int & (1 << 53) - 1) - 2**52
+        req = CrawlRequest(url=url, visit_id=visit_id, crawl_id=CRAWL_ID)
+
         print(f'Sending Request: {req.url}')
-
-        # This is bad producer shouldn't be coupled to datastore - probably need another topic
-        session = Session()
-        request = DBCrawlRequest(id=req.id, url=req.url)
-        session.add(request)
-        session.commit()
-        session.close()
-
+        await crawl_request_log_topic.send(value=req)
         await crawl_request_topic.send(value=req)
