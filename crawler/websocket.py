@@ -9,6 +9,7 @@ from websockets.server import WebSocketServerProtocol
 from app import (
     logger,
     APPNAME,
+    BROKER,
 )
 
 
@@ -22,8 +23,10 @@ class WSApp(faust.App):
 
 
 class Websockets(Service):
+    # This was cribbed from StackOverflow, it's not clear
+    # how much of this I'm using.
 
-    def __init__(self, app, bind: str = 'localhost', port: int = 7799, **kwargs):
+    def __init__(self, app, bind: str = '0.0.0.0', port: int = 7799, **kwargs):
         self.app = app
         self.bind = bind
         self.port = port
@@ -52,4 +55,4 @@ class Websockets(Service):
         await websockets.serve(self.on_messages, self.bind, self.port)
 
 
-app = WSApp(APPNAME)
+app = WSApp(APPNAME, broker=BROKER)
