@@ -2,7 +2,6 @@ import json
 import os
 
 from selenium import webdriver
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.firefox.options import Options
 
 import configure_firefox
@@ -10,8 +9,7 @@ from app import logger
 
 
 DEFAULT_SCREEN_RES = (1366, 768)
-# TODO
-# - Work with command line argument LOG FILE
+# TODO Work with command line argument / config file
 LOG_FILE = os.environ.get('GECKODRIVER_LOG_FILE', 'geckodriver.log')
 
 
@@ -38,8 +36,8 @@ def get_driver(visit_id, crawl_id):
         logger.info(f"OPENWPM: Setting custom preference: {name} = {value}")
         fo.set_preference(name, value)
 
-    #if manager_params['testing']:
-    fo.add_argument('-jsconsole')
+    if manager_params['testing']:
+        fo.add_argument('-jsconsole')
 
     # Set the binary
     binary_path = os.path.join(root_dir, 'firefox-bin', 'firefox-bin')

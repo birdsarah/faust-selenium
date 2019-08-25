@@ -7,12 +7,6 @@ import traceback
 
 import faust
 
-from sqlalchemy.engine import create_engine
-from datasaver_db import (
-    Session,
-    Base
-)
-
 # ---------------------------------------------------------------------
 # Faust Records
 # ---------------------------------------------------------------------
@@ -37,6 +31,7 @@ class CrawlLog(faust.Record, serializer='json'):
 class WebExtStart(faust.Record, serializer='json'):
     visit_id: str
     crawl_id: str
+
 
 # ---------------------------------------------------------------------
 # Setup Logging
@@ -101,12 +96,6 @@ crawl_request_log_topic = app.topic('crawl-request-log', value_type=CrawlRequest
 crawl_result_topic = app.topic('crawl-result', value_type=CrawlResult)
 crawl_log_topic = app.topic('crawl-log', value_type=CrawlLog)
 webext_start_topic = app.topic('webext-start', value_type=WebExtStart)
-
-# Database
-engine = create_engine('sqlite:///crawldata.db')
-Base.metadata.bind = engine
-Session.configure(bind=engine)
-Base.metadata.create_all()
 
 # Logging
 logger = logging.getLogger('crawler')

@@ -1,13 +1,6 @@
 {
-    "data_directory": "demo-data",
-    "log_directory": "demo-data",
-    "output_format": "local",
-    "database_name": "crawl-data.sqlite",
-    "log_file": "openwpm.log",
-    "failure_limit": null,
+    "database_name": "demo-data/crawl-data.sqlite",
     "testing": false,
-    "s3_bucket": null,
-    "s3_directory": null,
     "dwell_time": 3
 }
 
