@@ -11,24 +11,37 @@ Base = declarative_base()
 class DBCrawlRequest(Base):
     __tablename__ = 'crawl_requests'
 
-    id = Column(Integer(), primary_key=True, auto_increment=True())
-    request_id = Column(String(256), nullable=False)
+    id = Column(String(256), primary_key=True)
     url = Column(Text(), nullable=False)
 
 
 class DBCrawlResult(Base):
     __tablename__ = 'crawl_results'
 
-    id = Column(Integer(), primary_key=True, auto_increment=True())
+    id = Column(String(256), primary_key=True)
     request_id = Column(String(256), nullable=False)
     url = Column(Text(), nullable=False)
-    success = Column(Boolean, nullable=False)
+    success = Column(Boolean(), nullable=False)
+
+
+class DBLog(Base):
+    # The fields here should match the
+    # KafkaLogHandler in app.py
+    __tablename__ = 'logs'
+    id = Column(Integer(), primary_key=True, auto_increment=True)
+    timestamp = Column(String(256), nullable=False)
+    msecs = Column(Integer(), nullable=False)
+    name = Column(Text(), nullable=False)
+    level = Column(String(256), nullable=False)
+    message = Column(Text(), nullable=False)
+    exception = Column(Text())
+    stack = Column(Text())
 
 
 class DBJavascript(Base):
     __tablename__ = 'javascript'
 
-    id = Column(Integer(), primary_key=True, auto_increment=True())
+    id = Column(Integer(), primary_key=True, auto_increment=True)
 
     top_level_url = Column(Text())
     document_url = Column(Text())

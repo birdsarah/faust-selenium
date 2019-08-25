@@ -6,8 +6,11 @@ from urllib.parse import quote
 from app import (
     app,
     crawl_request_topic,
+    crawl_request_log_topic,
     CrawlRequest,
+    Session,
 )
+from datasaver_db import DBCrawlRequest
 
 
 @app.task
@@ -22,7 +25,15 @@ async def producer():
         grouped = match.groups()
         assert len(grouped) == 2
 
-        url = quote(grouped[1], safe=":/")
+        url = quote(grouped[1], safe=":/?=")
         req = CrawlRequest(id=str(uuid.uuid4()), url=url)
         print(f'Sending Request: {req.url}')
+
+        # This is bad producer shouldn't be coupled to datastore - probably need another topic
+        session = Session()
+        request = DBCrawlRequest(id=req.id, url=req.url)
+        session.add(request)
+        session.commit()
+        session.close()
+
         await crawl_request_topic.send(value=req)
