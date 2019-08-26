@@ -12,10 +12,20 @@ from app import (
     logger,
     APPNAME,
     BROKER,
-    WebExtJavascript,
     WebExtStart,
-    webext_javascript_topic,
     webext_start_topic,
+    webext_javascript_topic,
+    webext_javascript_cookie_topic,
+    webext_navigation_topic,
+    webext_http_request_topic,
+    webext_http_response_topic,
+    webext_http_redirect_topic,
+    WebExtJavascript,
+    WebExtJavascriptCookie,
+    WebExtNavigation,
+    WebExtHttpRequest,
+    WebExtHttpResponse,
+    WebExtHttpRedirect,
 )
 
 instrument_type_map = {
@@ -23,6 +33,26 @@ instrument_type_map = {
         'topic': webext_javascript_topic,
         'record': WebExtJavascript,
     },
+    'javascript_cookies': {
+        'topic': webext_javascript_cookie_topic,
+        'record': WebExtJavascriptCookie,
+    },
+    'http_requests': {
+        'topic': webext_http_request_topic,
+        'record': WebExtHttpRequest,
+    },
+    'http_responses': {
+        'topic': webext_http_response_topic,
+        'record': WebExtHttpResponse,
+    },
+    'http_redirects': {
+        'topic': webext_http_redirect_topic,
+        'record': WebExtHttpRedirect,
+    },
+    'navigations': {
+        'topic': webext_navigation_topic,
+        'record': WebExtNavigation,
+    }
 }
 
 

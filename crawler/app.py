@@ -60,6 +60,131 @@ class WebExtJavascript(faust.Record, serializer='json'):
     arguments: str = ''  # Signifies optional
 
 
+class WebExtJavascriptCookie(faust.Record, serializer='json'):
+    crawl_id: str
+    visit_id: str
+    time_stamp: str
+
+    record_type: str
+    change_cause: str
+    extension_session_uuid: str
+    event_ordinal: int
+    expiry: str
+    is_http_only: int
+    is_host_only: int
+    is_session: int
+    host: str
+    is_secure: int
+    name: str
+    path: str
+    value: str
+    same_site: str
+    first_party_domain: str
+    store_id: str
+
+
+class WebExtNavigation(faust.Record, serializer='json'):
+    crawl_id: str
+    visit_id: str
+
+    before_navigate_event_ordinal: str
+    before_navigate_time_stamp: str
+    parent_frame_id: int
+
+    transition_qualifiers: str
+    transition_type: str
+    committed_event_ordinal: int
+    committed_time_stamp: str
+
+    incognito: int
+    extension_session_uuid: str
+    process_id: int
+    window_id: int
+    tab_id: int
+    tab_opener_tab_id: int
+    frame_id: int
+    window_width: int
+    window_height: int
+    window_type: str
+    tab_width: int
+    tab_height: int
+    tab_cookie_store_id: str
+    uuid: str
+    url: str
+
+
+class WebExtHttpRequest(faust.Record, serializer='json'):
+    crawl_id: str
+    visit_id: str
+    time_stamp: str
+
+    extension_session_uuid: str
+    event_ordinal: int
+    window_id: int
+    tab_id: int
+    frame_id: int
+    parent_frame_id: int
+    request_id: int
+
+    url: str
+    top_level_url: str
+    method: str
+    referrer: str
+    post_body: str
+    post_body_raw: str
+    headers: str
+    is_XHR: int
+    is_full_page: int
+    is_frame_load: int
+    triggering_origin: str
+    loading_origin: str
+    loading_href: str
+    resource_type: str
+    frame_ancestors: str
+
+
+class WebExtHttpResponse(faust.Record, serializer='json'):
+    crawl_id: str
+    visit_id: str
+    time_stamp: str
+
+    incognito: int
+    extension_session_uuid: str
+    event_ordinal: int
+    window_id: int
+    tab_id: int
+    frame_id: int
+    request_id: int
+
+    is_cached: int
+    url: str
+    method: str
+    response_status: str
+    response_status_text: str
+    headers: str
+    location: str
+    content_hash: str
+
+
+class WebExtHttpRedirect(faust.Record, serializer='json'):
+    crawl_id: str
+    visit_id: str
+    time_stamp: str
+
+    extension_session_uuid: str
+    event_ordinal: int
+    window_id: int
+    tab_id: int
+    frame_id: int
+    old_request_id: int
+    new_request_id: int
+    old_request_url: str
+    new_request_url: str
+
+    response_status: str
+    response_status_text: str
+
+
 # ---------------------------------------------------------------------
 # Setup Logging
 # ---------------------------------------------------------------------
@@ -124,6 +249,11 @@ crawl_result_topic = app.topic('crawl-result', value_type=CrawlResult)
 crawl_log_topic = app.topic('crawl-log', value_type=CrawlLog)
 webext_start_topic = app.topic('webext-start', value_type=WebExtStart)
 webext_javascript_topic = app.topic('webext-javascript', value_type=WebExtJavascript)
+webext_javascript_cookie_topic = app.topic('webext-javascript-cookie', value_type=WebExtJavascript)
+webext_navigation_topic = app.topic('webext-navigation', value_type=WebExtNavigation)
+webext_http_request_topic = app.topic('webext-http-request', value_type=WebExtHttpRequest)
+webext_http_response_topic = app.topic('webext-http-response', value_type=WebExtHttpResponse)
+webext_http_redirect_topic = app.topic('webext-http-redirect', value_type=WebExtHttpRedirect)
 
 # Logging
 logger = logging.getLogger('crawler')
