@@ -9,6 +9,7 @@ import faust
 
 with open('manager_params.json', 'r') as f:
     manager_params = json.loads(f.read())
+# Note that testing halts websocket output
 TESTING = manager_params['testing']
 
 
@@ -132,7 +133,7 @@ class WebExtHttpRequest(faust.Record, serializer='json'):
     tab_id: int
     frame_id: int
     parent_frame_id: int
-    request_id: int
+    request_id: str
 
     url: str
     top_level_url: str
@@ -164,7 +165,7 @@ class WebExtHttpResponse(faust.Record, serializer='json'):
     window_id: int
     tab_id: int
     frame_id: int
-    request_id: int
+    request_id: str
 
     is_cached: int
     url: str
@@ -189,8 +190,8 @@ class WebExtHttpRedirect(faust.Record, serializer='json'):
     window_id: int
     tab_id: int
     frame_id: int
-    old_request_id: int
-    new_request_id: int
+    old_request_id: str
+    new_request_id: str
     old_request_url: str
     new_request_url: str
 

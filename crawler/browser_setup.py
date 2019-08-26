@@ -29,6 +29,11 @@ def get_driver(visit_id, crawl_id):
     # https://github.com/SeleniumHQ/selenium/issues/2106#issuecomment-320238039
     fo = Options()
 
+    # If testing we don't want headless and we do want jsconsole
+    if TESTING:
+        browser_params['headless'] = False
+        fo.add_argument('-jsconsole')
+
     # Set various prefs to improve speed and eliminate traffic to Mozilla
     configure_firefox.optimize_prefs(fo, browser_params)
 
@@ -37,10 +42,6 @@ def get_driver(visit_id, crawl_id):
     for name, value in browser_params['prefs'].items():
         logger.info(f"OPENWPM: Setting custom preference: {name} = {value}")
         fo.set_preference(name, value)
-
-    # Can only add jsconsole to not headless sessions
-    if TESTING and not browser_params['headless']:
-        fo.add_argument('-jsconsole')
 
     # Set the binary
     binary_path = os.path.join(root_dir, 'firefox-bin', 'firefox-bin')

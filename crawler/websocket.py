@@ -12,7 +12,6 @@ from app import (
     logger,
     APPNAME,
     BROKER,
-    TESTING,
     WebExtStart,
     webext_start_topic,
     webext_javascript_topic,
@@ -78,8 +77,7 @@ class Websockets(Service):
         super().__init__(**kwargs)
 
     async def on_message(self, ws, message) -> None:
-        if TESTING:
-            logger.debug(message)
+        # print(message)
 
         # Parse JSON message
         try:

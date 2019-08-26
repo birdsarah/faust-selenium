@@ -165,7 +165,7 @@ class DBWebExtHttpRequest(Base):
     tab_id = Column(Integer(), nullable=False)
     frame_id = Column(Integer(), nullable=False)
     parent_frame_id = Column(Integer(), nullable=False)
-    request_id = Column(Integer(), nullable=False)
+    request_id = Column(String(256), nullable=False)
 
     url = Column(Text(), nullable=False)
     top_level_url = Column(Text(), nullable=False)
@@ -198,7 +198,7 @@ class DBWebExtHttpResponse(Base):
     window_id = Column(Integer(), nullable=False)
     tab_id = Column(Integer(), nullable=False)
     frame_id = Column(Integer(), nullable=False)
-    request_id = Column(Integer(), nullable=False)
+    request_id = Column(String(256), nullable=False)
 
     is_cached = Column(Integer(), nullable=False)
     url = Column(Text(), nullable=False)
@@ -224,8 +224,8 @@ class DBWebExtHttpRedirect(Base):
     window_id = Column(Integer(), nullable=False)
     tab_id = Column(Integer(), nullable=False)
     frame_id = Column(Integer(), nullable=False)
-    old_request_id = Column(Integer(), nullable=False)
-    new_request_id = Column(Integer(), nullable=True)
+    old_request_id = Column(String(256), nullable=False)
+    new_request_id = Column(String(256), nullable=True)
     old_request_url = Column(Text(), nullable=False)
     new_request_url = Column(Text(), nullable=False)
 
