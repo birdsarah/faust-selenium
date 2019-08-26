@@ -57,6 +57,8 @@ class WebExtJavascript(faust.Record, serializer='json'):
     value: str
     time_stamp: str
     incognito: int
+
+    # Optional fields
     arguments: str = ''  # Signifies optional
 
 
@@ -87,10 +89,6 @@ class WebExtNavigation(faust.Record, serializer='json'):
     crawl_id: str
     visit_id: str
 
-    before_navigate_event_ordinal: str
-    before_navigate_time_stamp: str
-    parent_frame_id: int
-
     transition_qualifiers: str
     transition_type: str
     committed_event_ordinal: int
@@ -98,10 +96,8 @@ class WebExtNavigation(faust.Record, serializer='json'):
 
     incognito: int
     extension_session_uuid: str
-    process_id: int
     window_id: int
     tab_id: int
-    tab_opener_tab_id: int
     frame_id: int
     window_width: int
     window_height: int
@@ -112,12 +108,20 @@ class WebExtNavigation(faust.Record, serializer='json'):
     uuid: str
     url: str
 
+    # Optional fields
+    process_id: int = -1
+    tab_opener_tab_id: int = -1
+    before_navigate_event_ordinal: int = -1
+    before_navigate_time_stamp: str = ''
+    parent_frame_id: int = -1
+
 
 class WebExtHttpRequest(faust.Record, serializer='json'):
     crawl_id: str
     visit_id: str
     time_stamp: str
 
+    incognito: int
     extension_session_uuid: str
     event_ordinal: int
     window_id: int
@@ -130,8 +134,6 @@ class WebExtHttpRequest(faust.Record, serializer='json'):
     top_level_url: str
     method: str
     referrer: str
-    post_body: str
-    post_body_raw: str
     headers: str
     is_XHR: int
     is_full_page: int
@@ -141,6 +143,10 @@ class WebExtHttpRequest(faust.Record, serializer='json'):
     loading_href: str
     resource_type: str
     frame_ancestors: str
+
+    # Optional fields
+    post_body: str = ''
+    post_body_raw: str = ''
 
 
 class WebExtHttpResponse(faust.Record, serializer='json'):
@@ -163,7 +169,9 @@ class WebExtHttpResponse(faust.Record, serializer='json'):
     response_status_text: str
     headers: str
     location: str
-    content_hash: str
+
+    # Optional fields
+    content_hash: str = ''
 
 
 class WebExtHttpRedirect(faust.Record, serializer='json'):

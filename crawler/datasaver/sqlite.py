@@ -158,6 +158,7 @@ class DBWebExtHttpRequest(Base):
     visit_id = Column(String(256))
     time_stamp = Column(String(256))
 
+    incognito = Column(Integer())
     extension_session_uuid = Column(String(256))
     event_ordinal = Column(Integer())
     window_id = Column(Integer())
