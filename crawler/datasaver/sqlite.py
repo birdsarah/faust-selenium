@@ -11,6 +11,7 @@ from app import (
     crawl_request_log_topic,
     crawl_log_topic,
     webext_start_topic,
+    webext_javascript_topic,
 )
 
 Session = sessionmaker()
@@ -35,8 +36,7 @@ class DBCrawlResult(Base):
 
 
 class DBLog(Base):
-    # The fields here should match the
-    # KafkaLogHandler in app.py
+    # The fields here should match those in KafkaLogHandler (app.py)
     __tablename__ = 'logs'
     id = Column(Integer(), primary_key=True, auto_increment=True)
     timestamp = Column(String(256), nullable=False)
@@ -56,7 +56,7 @@ class DBWebExtStart(Base):
     crawl_id = Column(String(256), nullable=False)
 
 
-class DBJavascript(Base):
+class DBWebExtJavascript(Base):
     __tablename__ = 'javascript'
 
     id = Column(Integer(), primary_key=True, auto_increment=True)
@@ -65,12 +65,12 @@ class DBJavascript(Base):
     document_url = Column(Text())
     script_url = Column(Text())
 
-    crawl_id = Column(Integer())
-    visit_id = Column(Integer())
+    crawl_id = Column(String(256))
+    visit_id = Column(String(256))
 
     extension_session_uuid = Column(String(256))
     event_ordinal = Column(Integer())
-    page_scoped_event_orginal = Column(Integer())
+    page_scoped_event_ordinal = Column(Integer())
     window_id = Column(Integer())
     tab_id = Column(Integer())
     frame_id = Column(Integer())
@@ -81,9 +81,10 @@ class DBJavascript(Base):
     call_stack = Column(Text())
     symbol = Column(String(256))
     operation = Column(String(12))
-    value = Column(Text())  # Max length?
     time_stamp = Column(String(256))  # Parse?
     incognito = Column(Integer())
+    value = Column(Text())  # Max length?
+    arguments = Column(Text())  # Parse?
 
 
 # Setup Database
@@ -123,6 +124,7 @@ async def crawl_result_to_sql(crawl_results):
 
 @app.agent(crawl_log_topic)
 async def logs_to_sql(logs):
+    # TODO - make this only save for a specific user specified log-level
     async for log in logs:
         # Extract log body from log kafka message
         log_body = json.loads(
@@ -136,4 +138,11 @@ async def logs_to_sql(logs):
 async def webext_start_to_sql(starts):
     async for start in starts:
         r = DBWebExtStart(**start.asdict())
+        _atomic_add(r)
+
+
+@app.agent(webext_javascript_topic)
+async def webext_javascript_to_sql(stream):
+    async for msg in stream:
+        r = DBWebExtJavascript(**msg.asdict())
         _atomic_add(r)

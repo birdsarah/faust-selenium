@@ -16,6 +16,8 @@ an issue as each worker will be in their own pod.
   * faust -A producer worker -l info -p 6067
   * faust -A websocket worker -l info -p 6068
   * faust -A crawler worker -l info -p 6083
+  * faust -A geckodriver_log_reader -l info -p 6081
+
 * To use simple_producer for testing:
   * faust -A simple_producer worker -l info -p 6067
   * faust -A simple_producer send simple_request '{"url": "http://somewhere-to-crawl.com"}'
@@ -23,3 +25,5 @@ an issue as each worker will be in their own pod.
 * Have not yet figured out:
   * Coordinating websockets and crawlers so one websocket per crawler
   * What happens if you try and start two websockets?
+  * DB migrations - delete between changes
+  * Dataloss can occur if websocket server fails / goes down / errors

@@ -12,9 +12,18 @@ from app import (
     logger,
     APPNAME,
     BROKER,
+    WebExtJavascript,
     WebExtStart,
+    webext_javascript_topic,
     webext_start_topic,
 )
+
+instrument_type_map = {
+    'javascript': {
+        'topic': webext_javascript_topic,
+        'record': WebExtJavascript,
+    },
+}
 
 
 class WSApp(faust.App):
@@ -70,9 +79,18 @@ class Websockets(Service):
         elif message_components[1] == 'Start':
             await webext_start_topic.send(value=WebExtStart(**parsed))
         elif message_components[1] == 'Data':
-            pass
+            if len(message_components) != 3:
+                logger.error('_component data does not contain instrument_type')
+                return
+            instrument_type = message_components[2]
+            if instrument_type not in instrument_type_map.keys():
+                logger.error(f'instrument type {instrument_type} is unknown')
+                return
+            topic = instrument_type_map[instrument_type]['topic']
+            record = instrument_type_map[instrument_type]['record']
+            await topic.send(value=record(**parsed))
         elif message_components[1] == 'Content':
-            pass
+            logger.error('Content not yet implemented')
         else:
             logger.error('Invalid message component', message)
 

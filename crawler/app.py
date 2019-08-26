@@ -7,12 +7,12 @@ import traceback
 
 import faust
 
+
 # ---------------------------------------------------------------------
 # Faust Records
 # ---------------------------------------------------------------------
 
 # TODO I think CrawlRequest should have a timestamp.
-
 class CrawlRequest(faust.Record, serializer='json'):
     visit_id: str
     crawl_id: str
@@ -31,6 +31,33 @@ class CrawlLog(faust.Record, serializer='json'):
 class WebExtStart(faust.Record, serializer='json'):
     visit_id: str
     crawl_id: str
+
+
+class WebExtJavascript(faust.Record, serializer='json'):
+    top_level_url: str
+    document_url: str
+    script_url: str
+
+    crawl_id: str
+    visit_id: str
+
+    extension_session_uuid: str
+    event_ordinal: int
+    page_scoped_event_ordinal: int
+    window_id: int
+    tab_id: int
+    frame_id: int
+    script_line: str
+    script_col: str
+    func_name: str
+    script_loc_eval: str
+    call_stack: str
+    symbol: str
+    operation: str
+    value: str
+    time_stamp: str
+    incognito: int
+    arguments: str = ''  # Signifies optional
 
 
 # ---------------------------------------------------------------------
@@ -96,6 +123,7 @@ crawl_request_log_topic = app.topic('crawl-request-log', value_type=CrawlRequest
 crawl_result_topic = app.topic('crawl-result', value_type=CrawlResult)
 crawl_log_topic = app.topic('crawl-log', value_type=CrawlLog)
 webext_start_topic = app.topic('webext-start', value_type=WebExtStart)
+webext_javascript_topic = app.topic('webext-javascript', value_type=WebExtJavascript)
 
 # Logging
 logger = logging.getLogger('crawler')
