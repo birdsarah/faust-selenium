@@ -1,6 +1,6 @@
 {
     "database_name": "demo-data/crawl-data.sqlite",
-    "testing": false,
+    "testing": true,
     "dwell_time": 3
 }
 

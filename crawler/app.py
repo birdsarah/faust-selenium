@@ -7,6 +7,10 @@ import traceback
 
 import faust
 
+with open('manager_params.json', 'r') as f:
+    manager_params = json.loads(f.read())
+TESTING = manager_params['testing']
+
 
 # ---------------------------------------------------------------------
 # Faust Records
@@ -165,13 +169,13 @@ class WebExtHttpResponse(faust.Record, serializer='json'):
     is_cached: int
     url: str
     method: str
-    response_status: str
-    response_status_text: str
     headers: str
     location: str
 
     # Optional fields
     content_hash: str = ''
+    response_status: str = ''
+    response_status_text: str = ''
 
 
 class WebExtHttpRedirect(faust.Record, serializer='json'):
@@ -179,6 +183,7 @@ class WebExtHttpRedirect(faust.Record, serializer='json'):
     visit_id: str
     time_stamp: str
 
+    incognito: int
     extension_session_uuid: str
     event_ordinal: int
     window_id: int
@@ -189,8 +194,9 @@ class WebExtHttpRedirect(faust.Record, serializer='json'):
     old_request_url: str
     new_request_url: str
 
-    response_status: str
-    response_status_text: str
+    # Optional fields
+    response_status: str = ''
+    response_status_text: str = ''
 
 
 # ---------------------------------------------------------------------

@@ -5,7 +5,10 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
 import configure_firefox
-from app import logger
+from app import (
+    TESTING,
+    logger,
+)
 
 
 DEFAULT_SCREEN_RES = (1366, 768)
@@ -17,7 +20,6 @@ def get_driver(visit_id, crawl_id):
     root_dir = os.path.dirname(os.path.abspath(__file__))
 
     browser_params = json.loads(open('browser_params.json').read())
-    manager_params = json.loads(open('manager_params.json').read())
 
     browser_params['visit_id'] = visit_id
     browser_params['crawl_id'] = crawl_id
@@ -36,7 +38,8 @@ def get_driver(visit_id, crawl_id):
         logger.info(f"OPENWPM: Setting custom preference: {name} = {value}")
         fo.set_preference(name, value)
 
-    if manager_params['testing']:
+    # Can only add jsconsole to not headless sessions
+    if TESTING and not browser_params['headless']:
         fo.add_argument('-jsconsole')
 
     # Set the binary
@@ -58,7 +61,7 @@ def get_driver(visit_id, crawl_id):
     extension_config = dict()
     extension_config.update(browser_params)
     extension_config['ws_address'] = ("127.0.0.1", 7799)
-    extension_config['testing'] = manager_params['testing']
+    extension_config['testing'] = TESTING
     ext_config_file = os.path.join(profile_path, 'browser_params.json')
     with open(ext_config_file, 'w') as f:
         json.dump(extension_config, f)
