@@ -1,6 +1,6 @@
 {
     "extension_enabled": true,
-    "cookie_instrument": false,
+    "cookie_instrument": true,
     "js_instrument": true,
     "http_instrument": true,
     "navigation_instrument": true,

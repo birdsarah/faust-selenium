@@ -1,4 +1,4 @@
-import re
+import json
 import uuid
 
 from urllib.parse import quote
@@ -15,17 +15,9 @@ CRAWL_ID = (uuid.uuid4().int & (1 << 32) - 1) - 2**31
 
 @app.task
 async def producer():
-    with open('tranco_10k_alexa_10k_union.unlimited_depth_max_10_links.ranked.csv', 'r') as f:
-        data = f.read()
-    data = data[0:10]  # Just testing for now
-
-    regex = r"(\d+),(.+)"
-    matches = re.finditer(regex, data, re.MULTILINE)
-    for match in matches:
-        grouped = match.groups()
-        assert len(grouped) == 2
-
-        url = quote(grouped[1], safe=":/?=")
+    url_list = json.load(open('sample_of_js_cookies_sites_200.csv', 'r'))
+    for u in url_list:
+        url = quote(u, safe=":/?=")
         visit_id = (uuid.uuid4().int & (1 << 53) - 1) - 2**52
         req = CrawlRequest(url=url, visit_id=visit_id, crawl_id=CRAWL_ID)
 

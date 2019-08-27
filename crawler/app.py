@@ -49,7 +49,6 @@ class WebExtJavascript(faust.Record, serializer='json'):
     extension_session_uuid: str
     event_ordinal: int
     page_scoped_event_ordinal: int
-    window_id: int
     tab_id: int
     frame_id: int
     script_line: str
@@ -64,6 +63,7 @@ class WebExtJavascript(faust.Record, serializer='json'):
     incognito: int
 
     # Optional fields
+    window_id: int = -1
     arguments: str = ''  # Signifies optional
 
 
@@ -101,7 +101,6 @@ class WebExtNavigation(faust.Record, serializer='json'):
 
     incognito: int
     extension_session_uuid: str
-    window_id: int
     tab_id: int
     frame_id: int
     window_width: int
@@ -114,6 +113,7 @@ class WebExtNavigation(faust.Record, serializer='json'):
     url: str
 
     # Optional fields
+    window_id: int = -1
     process_id: int = -1
     tab_opener_tab_id: int = -1
     before_navigate_event_ordinal: int = -1
@@ -129,7 +129,6 @@ class WebExtHttpRequest(faust.Record, serializer='json'):
     incognito: int
     extension_session_uuid: str
     event_ordinal: int
-    window_id: int
     tab_id: int
     frame_id: int
     parent_frame_id: int
@@ -150,6 +149,7 @@ class WebExtHttpRequest(faust.Record, serializer='json'):
     frame_ancestors: str
 
     # Optional fields
+    window_id: int = -1
     post_body: str = ''
     post_body_raw: str = ''
 
@@ -162,7 +162,6 @@ class WebExtHttpResponse(faust.Record, serializer='json'):
     incognito: int
     extension_session_uuid: str
     event_ordinal: int
-    window_id: int
     tab_id: int
     frame_id: int
     request_id: str
@@ -174,6 +173,7 @@ class WebExtHttpResponse(faust.Record, serializer='json'):
     location: str
 
     # Optional fields
+    window_id: int = -1
     content_hash: str = ''
     response_status: str = ''
     response_status_text: str = ''
@@ -187,7 +187,6 @@ class WebExtHttpRedirect(faust.Record, serializer='json'):
     incognito: int
     extension_session_uuid: str
     event_ordinal: int
-    window_id: int
     tab_id: int
     frame_id: int
     old_request_id: str
@@ -196,6 +195,7 @@ class WebExtHttpRedirect(faust.Record, serializer='json'):
     new_request_url: str
 
     # Optional fields
+    window_id: int = -1
     response_status: str = ''
     response_status_text: str = ''
 
@@ -264,7 +264,7 @@ crawl_result_topic = app.topic('crawl-result', value_type=CrawlResult)
 crawl_log_topic = app.topic('crawl-log', value_type=CrawlLog)
 webext_start_topic = app.topic('webext-start', value_type=WebExtStart)
 webext_javascript_topic = app.topic('webext-javascript', value_type=WebExtJavascript)
-webext_javascript_cookie_topic = app.topic('webext-javascript-cookie', value_type=WebExtJavascript)
+webext_javascript_cookie_topic = app.topic('webext-javascript-cookie', value_type=WebExtJavascriptCookie)
 webext_navigation_topic = app.topic('webext-navigation', value_type=WebExtNavigation)
 webext_http_request_topic = app.topic('webext-http-request', value_type=WebExtHttpRequest)
 webext_http_response_topic = app.topic('webext-http-response', value_type=WebExtHttpResponse)

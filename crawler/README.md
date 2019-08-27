@@ -13,17 +13,24 @@ an issue as each worker will be in their own pod.
 * Activate environment
 * From this directory launch workers. You can launch multiple for each type (esp datasaver and crawler):
   * faust -A datasaver.sqlite worker -l info -p 6066
-  * faust -A producer worker -l info -p 6067
-  * faust -A websocket worker -l info -p 6068
-  * faust -A crawler worker -l info -p 6083
+  * faust -A websocket worker -l info -p 6068 (note the port here is not the WS port it's the worker port)
+  * faust -A crawler worker -l info -p 6083 (as many of these as you want to parallelize)
   * faust -A geckodriver_log_reader -l info -p 6081
+  * When everything's ready, launch the producer:   
+    * faust -A producer worker -l info -p 6067
 
 * To use simple_producer for testing:
   * faust -A simple_producer worker -l info -p 6067
   * faust -A simple_producer send simple_request '{"url": "http://somewhere-to-crawl.com"}'
 
 * Have not yet figured out:
-  * Coordinating websockets and crawlers so one websocket per crawler
-  * What happens if you try and start two websockets?
-  * DB migrations - delete between changes
-  * Dataloss can occur if websocket server fails / goes down / errors
+  * Dataloss will occur if websocket server fails / goes down / errors
+    * Should co-ordinate websockets and crawlers so one websocket per crawler
+  * DB migrations:
+    * Delete between changes
+  * All the ins-and-outs of db performance and writing:
+    * Batches help a lot. For now only starting 1 datasaver worker.
+
+
+Kafka notes
+* Can only parallelize for as many partitions as you have, so if you want to have 100 crawlers, make sure the crawl_request topic has 100 partitions.

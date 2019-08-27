@@ -247,83 +247,85 @@ Base.metadata.create_all()
 
 # Faust work to save data
 
-def _atomic_add(item):
+def _atomic_add(items):
     session = Session()
-    session.add(item)
+    session.add_all(items)
     session.commit()
     session.close()
 
 
 @app.agent(crawl_request_log_topic)
-async def crawl_request_to_sql(crawl_requests):
-    async for crawl_request in crawl_requests:
-        r = DBCrawlRequest(**crawl_request.asdict())
-        _atomic_add(r)
+async def crawl_request_to_sql(stream):
+    async for batch in stream.take(20, within=5):
+        items = [DBCrawlRequest(**crawl_request.asdict()) for crawl_request in batch]
+        _atomic_add(items)
 
 
 @app.agent(crawl_result_topic)
-async def crawl_result_to_sql(crawl_results):
-    async for crawl_result in crawl_results:
-        r = DBCrawlResult(**crawl_result.asdict())
-        _atomic_add(r)
+async def crawl_result_to_sql(stream):
+    async for batch in stream.take(20, within=5):
+        items = [DBCrawlResult(**msg.asdict()) for msg in batch]
+        _atomic_add(items)
 
 
 @app.agent(crawl_log_topic)
-async def logs_to_sql(logs):
+async def logs_to_sql(stream):
     # TODO - make this only save for a specific user specified log-level
-    async for log in logs:
+    async for batch in stream.take(100, within=10):
         # Extract log body from log kafka message
-        log_body = json.loads(
-            log.asdict()['log']
-        )
-        db_log = DBLog(**log_body)
-        _atomic_add(db_log)
+        items = []
+        for log in batch:
+            log_body = json.loads(
+                log.asdict()['log']
+            )
+            items.append(DBLog(**log_body))
+        _atomic_add(items)
 
 
 @app.agent(webext_start_topic)
-async def webext_start_to_sql(starts):
-    async for start in starts:
-        r = DBWebExtStart(**start.asdict())
-        _atomic_add(r)
+async def webext_start_to_sql(stream):
+    async for batch in stream.take(20, within=5):
+        items = [DBWebExtStart(**msg.asdict()) for msg in batch]
+        _atomic_add(items)
 
 
 @app.agent(webext_javascript_topic)
 async def webext_javascript_to_sql(stream):
-    async for msg in stream:
-        r = DBWebExtJavascript(**msg.asdict())
-        _atomic_add(r)
+    async for batch in stream.take(100, within=10):
+        items = [DBWebExtJavascript(**msg.asdict()) for msg in batch]
+        _atomic_add(items)
 
 
 @app.agent(webext_javascript_cookie_topic)
 async def webext_javascript_cookie_to_sql(stream):
-    async for msg in stream:
-        r = DBWebExtJavascriptCookie(**msg.asdict())
-        _atomic_add(r)
+    async for batch in stream.take(100, within=10):
+        items = [DBWebExtJavascriptCookie(**msg.asdict()) for msg in batch]
+        _atomic_add(items)
 
 
 @app.agent(webext_navigation_topic)
 async def webext_navigation_to_sql(stream):
-    async for msg in stream:
-        r = DBWebExtNavigation(**msg.asdict())
-        _atomic_add(r)
+    async for batch in stream.take(100, within=10):
+        items = [DBWebExtNavigation(**msg.asdict()) for msg in batch]
+        _atomic_add(items)
 
 
 @app.agent(webext_http_request_topic)
 async def webext_http_request_to_sql(stream):
-    async for msg in stream:
-        r = DBWebExtHttpRequest(**msg.asdict())
-        _atomic_add(r)
+    async for batch in stream.take(100, within=10):
+        items = [DBWebExtHttpRequest(**msg.asdict()) for msg in batch]
+        _atomic_add(items)
 
 
 @app.agent(webext_http_response_topic)
 async def webext_http_response_to_sql(stream):
-    async for msg in stream:
-        r = DBWebExtHttpResponse(**msg.asdict())
-        _atomic_add(r)
+    async for batch in stream.take(100, within=10):
+        items = [DBWebExtHttpResponse(**msg.asdict()) for msg in batch]
+        _atomic_add(items)
 
 
 @app.agent(webext_http_redirect_topic)
 async def webext_http_redirect_to_sql(stream):
-    async for msg in stream:
-        r = DBWebExtHttpRedirect(**msg.asdict())
-        _atomic_add(r)
+    async for batch in stream.take(100, within=10):
+        items = [DBWebExtHttpRedirect(**msg.asdict()) for msg in batch]
+        _atomic_add(items)
