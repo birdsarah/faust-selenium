@@ -20,7 +20,16 @@ RocksDB dependency on fedora:
 
     sudo dnf install rocksdb-devel
 
-Setup environment
+Setup environment:
 
     conda env create -f environment.yaml
     conda activate faust-selenium
+
+Install firefox and get openwpm extension - need unbranded Firefox in a 
+firefox-bin directory under crawler and openwpm.xpi in the same place for
+loading into the browser. (See OpenWPM repo for info on installation)
+
+
+ToDo:
+* RocksDB dependency should be optional - investigate
+* When unbranded firefox is available on conda-forge, use it
