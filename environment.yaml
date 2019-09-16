@@ -2,12 +2,13 @@ name: faust-selenium
 channels:
     - conda-forge
 dependencies:
-    - python=3.7
+    - python>=3.6
     - geckodriver
     - lz4
     - jupyterlab
     - pip
     - python-snappy
+    - pytz
     - selenium
     - sqlalchemy
     - websockets
