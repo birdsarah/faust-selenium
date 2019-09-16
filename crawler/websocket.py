@@ -116,8 +116,6 @@ class Websockets(Service):
                 logger.error('_component data does not contain instrument_type')
                 return
             instrument_type = message_components[2]
-            if instrument_type == 'javascript_cookies':
-                print('JS COOKIES')
             if instrument_type not in instrument_type_map.keys():
                 logger.error(f'instrument type {instrument_type} is unknown')
                 return
