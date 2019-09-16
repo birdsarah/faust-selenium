@@ -9,8 +9,9 @@ import faust
 
 with open('manager_params.json', 'r') as f:
     manager_params = json.loads(f.read())
-# Note that testing halts websocket output
-TESTING = manager_params['testing']
+
+TESTING = manager_params['testing']  # Reminder: testing halts websocket output
+BROKER = manager_params['kafka_broker']
 
 
 # ---------------------------------------------------------------------
@@ -261,7 +262,6 @@ class KafkaLogHandler(logging.StreamHandler):
 
 # App
 APPNAME = 'openwpm'
-BROKER = 'kafka://127.0.0.1:9092'
 app = faust.App(APPNAME, broker=BROKER)
 crawl_request_topic = app.topic('crawl-request', value_type=CrawlRequest)
 crawl_request_log_topic = app.topic('crawl-request-log', value_type=CrawlRequest)

@@ -33,3 +33,5 @@ loading into the browser. (See OpenWPM repo for info on installation)
 ToDo:
 * RocksDB dependency should be optional - investigate
 * When unbranded firefox is available on conda-forge, use it
+* Package
+* Ability to have multiple websocket workers so crawlers can talk to their own

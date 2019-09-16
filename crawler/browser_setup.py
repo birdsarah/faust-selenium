@@ -20,6 +20,7 @@ def get_driver(visit_id, crawl_id):
     root_dir = os.path.dirname(os.path.abspath(__file__))
 
     browser_params = json.loads(open('browser_params.json').read())
+    manager_params = json.loads(open('manager_params.json').read())
 
     browser_params['visit_id'] = visit_id
     browser_params['crawl_id'] = crawl_id
@@ -44,7 +45,7 @@ def get_driver(visit_id, crawl_id):
         fo.set_preference(name, value)
 
     # Set the binary
-    binary_path = os.path.join(root_dir, 'firefox-bin', 'firefox-bin')
+    binary_path = manager_params['firefox_binary_path']
     fo.binary = binary_path
     logger.info(f"OPENWPM: Browser Binary Path {binary_path}")
 
