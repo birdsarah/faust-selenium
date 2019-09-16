@@ -1,6 +1,8 @@
 import json
 
-from sqlalchemy import Column, Integer, Text, String, Boolean, ForeignKey, DateTime  # noqa
+from base64 import b64decode
+from itertools import groupby
+from sqlalchemy import Column, Integer, Text, String, Boolean, ForeignKey, DateTime, BLOB  # noqa
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import create_engine
@@ -16,6 +18,7 @@ from app import (
     webext_navigation_topic,
     webext_http_request_topic,
     webext_http_response_topic,
+    webext_http_response_content_topic,
     webext_http_redirect_topic,
 )
 
@@ -210,6 +213,15 @@ class DBWebExtHttpResponse(Base):
     content_hash = Column(Text(), nullable=False)
 
 
+class DBWebExtHttpResponseContent(Base):
+    __tablename__ = 'http_response_content'
+
+    id = Column(Integer(), primary_key=True, auto_increment=True)
+    content_hash = Column(Text(), nullable=False)
+    content = Column(BLOB(), nullable=False)  # This should store at least 1GB (https://stackoverflow.com/questions/11737955/what-is-the-maximum-size-of-the-image-to-be-stored-as-blob-in-sqlite-database)
+    length = Column(Integer(), nullable=False)
+
+
 class DBWebExtHttpRedirect(Base):
     __tablename__ = 'http_redirects'
 
@@ -321,6 +333,35 @@ async def webext_http_request_to_sql(stream):
 async def webext_http_response_to_sql(stream):
     async for batch in stream.take(100, within=10):
         items = [DBWebExtHttpResponse(**msg.asdict()) for msg in batch]
+        _atomic_add(items)
+
+
+def _decode_content_message(msg):
+    data = msg.asdict()
+    b64 = data.pop('b64')
+    data['content'] = b64decode(b64)
+    data['length'] = len(data['content'])
+    return data
+
+
+def _get_content_hash(msg):
+    return msg.content_hash
+
+
+@app.agent(webext_http_response_content_topic)
+async def webext_http_response_content_to_sql(stream):
+    """
+    Converts the content from b64 as it arrived to decoded content
+    before storage.
+    """
+    async for batch in stream.take(100, within=10):
+        # De-dupe by content hash
+        # (this won't be perfect due to stream batching, but will do to save space)
+        deduped = [next(v) for k, v in groupby(
+            sorted(batch, key=_get_content_hash), _get_content_hash
+        )]
+        # Decode b64 and add length before committing
+        items = [DBWebExtHttpResponseContent(**_decode_content_message(msg)) for msg in deduped]
         _atomic_add(items)
 
 

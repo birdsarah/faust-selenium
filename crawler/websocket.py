@@ -19,12 +19,14 @@ from app import (
     webext_navigation_topic,
     webext_http_request_topic,
     webext_http_response_topic,
+    webext_http_response_content_topic,
     webext_http_redirect_topic,
     WebExtJavascript,
     WebExtJavascriptCookie,
     WebExtNavigation,
     WebExtHttpRequest,
     WebExtHttpResponse,
+    WebExtHttpResponseContent,
     WebExtHttpRedirect,
 )
 
@@ -123,7 +125,7 @@ class Websockets(Service):
             record = instrument_type_map[instrument_type]['record']
             await topic.send(value=record(**parsed))
         elif message_components[1] == 'Content':
-            logger.error('Content not yet implemented')
+            await webext_http_response_content_topic.send(value=WebExtHttpResponseContent(**parsed))
         else:
             logger.error('Invalid message component', message)
 

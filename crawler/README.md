@@ -32,5 +32,6 @@ an issue as each worker will be in their own pod.
     * Batches help a lot. For now only starting 1 datasaver worker.
 
 
-Kafka notes
-* Can only parallelize for as many partitions as you have, so if you want to have 100 crawlers, make sure the crawl_request topic has 100 partitions.
+Notes
+* Kafka - Can only parallelize for as many partitions as you have, so if you want to have 100 crawlers, make sure the crawl_request topic has 100 partitions.
+* Content storage - must also have http instrumentation set to true

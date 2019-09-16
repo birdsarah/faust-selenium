@@ -179,6 +179,11 @@ class WebExtHttpResponse(faust.Record, serializer='json'):
     response_status_text: str = ''
 
 
+class WebExtHttpResponseContent(faust.Record, serializer='json'):
+    content_hash: str
+    b64: str  # This gets decoded and turned into content
+
+
 class WebExtHttpRedirect(faust.Record, serializer='json'):
     crawl_id: str
     visit_id: str
@@ -268,6 +273,7 @@ webext_javascript_cookie_topic = app.topic('webext-javascript-cookie', value_typ
 webext_navigation_topic = app.topic('webext-navigation', value_type=WebExtNavigation)
 webext_http_request_topic = app.topic('webext-http-request', value_type=WebExtHttpRequest)
 webext_http_response_topic = app.topic('webext-http-response', value_type=WebExtHttpResponse)
+webext_http_response_content_topic = app.topic('webect-http-response-content', value_type=WebExtHttpResponseContent)
 webext_http_redirect_topic = app.topic('webext-http-redirect', value_type=WebExtHttpRedirect)
 
 # Logging

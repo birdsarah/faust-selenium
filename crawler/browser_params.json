@@ -1,10 +1,10 @@
 {
     "extension_enabled": true,
-    "cookie_instrument": true,
-    "js_instrument": true,
+    "cookie_instrument": false,
+    "js_instrument": false,
     "http_instrument": true,
-    "navigation_instrument": true,
-    "save_javascript": false,
+    "navigation_instrument": false,
+    "save_javascript": true,
     "save_all_content": false,
     "headless": true,
 
