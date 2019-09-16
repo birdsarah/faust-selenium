@@ -33,6 +33,7 @@ class DBCrawlRequest(Base):
     visit_id = Column(String(256), nullable=False)
     crawl_id = Column(String(256), nullable=False)
     url = Column(Text(), nullable=False)
+    time_stamp = Column(String(256), nullable=False)
 
 
 class DBCrawlResult(Base):
@@ -41,6 +42,8 @@ class DBCrawlResult(Base):
     id = Column(Integer(), primary_key=True, auto_increment=True)
     visit_id = Column(String(256), nullable=False)
     success = Column(Boolean(), nullable=False)
+    time_stamp = Column(String(256), nullable=False)
+
 
 
 class DBLog(Base):

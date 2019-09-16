@@ -18,16 +18,17 @@ BROKER = manager_params['kafka_broker']
 # Faust Records
 # ---------------------------------------------------------------------
 
-# TODO I think CrawlRequest should have a timestamp.
 class CrawlRequest(faust.Record, serializer='json'):
     visit_id: str
     crawl_id: str
     url: str
+    time_stamp: str
 
 
 class CrawlResult(faust.Record, serializer='json'):
     visit_id: str
     success: bool
+    time_stamp: str
 
 
 class CrawlLog(faust.Record, serializer='json'):

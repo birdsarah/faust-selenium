@@ -1,5 +1,8 @@
+import datetime
 import json
+import pytz
 import uuid
+
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -43,5 +46,6 @@ async def crawl(crawl_requests):
         result = CrawlResult(
             visit_id=crawl_request.visit_id,
             success=success,
+            time_stamp=str(datetime.datetime.now(pytz.utc))
         )
         await crawl_result_topic.send(value=result)

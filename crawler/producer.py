@@ -1,4 +1,6 @@
+import datetime
 import json
+import pytz
 import uuid
 
 from urllib.parse import quote
@@ -19,7 +21,12 @@ async def producer():
     for u in url_list:
         url = quote(u, safe=":/?=")
         visit_id = (uuid.uuid4().int & (1 << 53) - 1) - 2**52
-        req = CrawlRequest(url=url, visit_id=visit_id, crawl_id=CRAWL_ID)
+        req = CrawlRequest(
+            url=url, 
+            visit_id=visit_id, 
+            crawl_id=CRAWL_ID,
+            time_stamp=str(datetime.datetime.now(pytz.utc))
+        )
 
         print(f'Sending Request: {req.url}')
         await crawl_request_log_topic.send(value=req)
