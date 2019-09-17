@@ -2,6 +2,7 @@
 crawler-data/
 
 # Other
+crawls/
 demo-data/
 firefox-bin
 firefox-profile
