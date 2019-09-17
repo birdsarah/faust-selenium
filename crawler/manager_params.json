@@ -1,7 +1,7 @@
 {
-    "database_name": "demo-data/crawl-data.sqlite",
+    "database_name": "crawls/crawl-data-2.sqlite",
     "testing": false,
-    "dwell_time": 5,
-    "firefox_binary_path": "C:\\Users\\Bird\\firefox-bin\\firefox.exe",
+    "dwell_time": 10,
+    "firefox_binary_path": "firefox-bin/firefox-bin",
     "kafka_broker": "kafka://192.168.1.136:9092"
 }
