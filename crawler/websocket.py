@@ -146,5 +146,4 @@ class Websockets(Service):
     async def _background_server(self):
         await websockets.serve(self.on_messages, self.bind, self.port)
 
-
-app = WSApp(APPNAME, broker=BROKER)
+app = WSApp(APPNAME, broker=BROKER, producer_max_request_size=2_000_000)
