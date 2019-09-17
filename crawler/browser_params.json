@@ -6,7 +6,7 @@
     "http_instrument": true,
     "navigation_instrument": true,
     "save_content": "script",
-    "headless": true,
+    "headless": false,
 
     "random_attributes": false,
     "bot_mitigation": false,
