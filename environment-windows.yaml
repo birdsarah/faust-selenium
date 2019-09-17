@@ -2,11 +2,12 @@ name: faust-selenium-windows
 channels:
     - conda-forge
 dependencies:
-    - python>=3.5
+    - python>=3.6
     - geckodriver
+    - multidict
     - pip
+    - pytz
     - selenium
     - websockets
-    - multidict
     - pip:
       - faust
