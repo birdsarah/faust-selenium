@@ -263,7 +263,7 @@ class KafkaLogHandler(logging.StreamHandler):
 
 # App
 APPNAME = 'openwpm'
-app = faust.App(APPNAME, broker=BROKER, producer_max_request_size=2_000_000)
+app = faust.App(APPNAME, broker=BROKER, producer_max_request_size=4_000_000)
 crawl_request_topic = app.topic('crawl-request', value_type=CrawlRequest)
 crawl_request_log_topic = app.topic('crawl-request-log', value_type=CrawlRequest)
 crawl_result_topic = app.topic('crawl-result', value_type=CrawlResult)
