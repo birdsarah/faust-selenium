@@ -1,7 +1,7 @@
 {
-    "database_name": "crawls/crawl-data-2.sqlite",
+    "database_name": "crawls/crawl-data-6.sqlite",
     "testing": false,
     "dwell_time": 10,
     "firefox_binary_path": "firefox-bin/firefox-bin",
-    "kafka_broker": "kafka://192.168.1.136:9092"
+    "kafka_broker": "kafka://localhost:9092"
 }
