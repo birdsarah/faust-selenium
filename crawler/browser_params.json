@@ -5,7 +5,7 @@
     "js_instrument_modules": "fingerprinting",
     "http_instrument": true,
     "navigation_instrument": true,
-    "save_content": "script",
+    "save_content": false,
     "headless": false,
 
     "random_attributes": false,
