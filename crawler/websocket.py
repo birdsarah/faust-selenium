@@ -130,13 +130,8 @@ class Websockets(Service):
             logger.error('Invalid message component', message)
 
     async def on_messages(self, ws: WebSocketServerProtocol, path: str) -> None:
-        try:
-            async for message in ws:
-                await self.on_message(ws, message)
-        except ConnectionClosed:
-            await self.on_close(ws)
-        except asyncio.CancelledError:
-            pass
+        async for message in ws:
+            await self.on_message(ws, message)
 
     async def on_close(self, ws) -> None:
         # called when websocket socket is closed.
@@ -146,4 +141,4 @@ class Websockets(Service):
     async def _background_server(self):
         await websockets.serve(self.on_messages, self.bind, self.port)
 
-app = WSApp(APPNAME, broker=BROKER, producer_max_request_size=2_000_000)
+app = WSApp(APPNAME, broker=BROKER, producer_max_request_size=4_000_000)
