@@ -1,11 +1,9 @@
-import asyncio
 import faust
 import json
 import websockets
 
 from mode import Service
 from logging import LogRecord
-from websockets.exceptions import ConnectionClosed
 from websockets.server import WebSocketServerProtocol
 
 from app import (
@@ -140,5 +138,6 @@ class Websockets(Service):
     @Service.task
     async def _background_server(self):
         await websockets.serve(self.on_messages, self.bind, self.port)
+
 
 app = WSApp(APPNAME, broker=BROKER, producer_max_request_size=4_000_000)

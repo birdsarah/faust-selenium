@@ -45,7 +45,6 @@ class DBCrawlResult(Base):
     time_stamp = Column(String(256), nullable=False)
 
 
-
 class DBLog(Base):
     # The fields here should match those in KafkaLogHandler (app.py)
     __tablename__ = 'logs'
@@ -221,7 +220,7 @@ class DBWebExtHttpResponseContent(Base):
 
     id = Column(Integer(), primary_key=True, auto_increment=True)
     content_hash = Column(Text(), nullable=False)
-    content = Column(BLOB(), nullable=False)  # This should store at least 1GB (https://stackoverflow.com/questions/11737955/what-is-the-maximum-size-of-the-image-to-be-stored-as-blob-in-sqlite-database)
+    content = Column(BLOB(), nullable=False)  # noqa This should store at least 1GB (https://stackoverflow.com/questions/11737955/what-is-the-maximum-size-of-the-image-to-be-stored-as-blob-in-sqlite-database)
     length = Column(Integer(), nullable=False)
 
 

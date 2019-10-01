@@ -40,3 +40,4 @@ Windows instructions:
 Notes
 * Kafka - Can only parallelize for as many partitions as you have, so if you want to have 100 crawlers, make sure the crawl_request topic has 100 partitions.
 * Content storage - must also have http instrumentation set to true
+* Saving content causes instability - causes websocket to error on large files
