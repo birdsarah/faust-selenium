@@ -1,11 +1,8 @@
 import datetime
 import json
 import pytz
-import uuid
+import time
 
-
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException, TimeoutException
 
 from app import (
@@ -16,10 +13,16 @@ from app import (
     logger
 )
 from browser_setup import get_driver
+from browser_commands import (
+    tab_restart_browser,
+    close_other_windows,
+    close_modals
+)
 
 with open('manager_params.json', 'r') as f:
     manager_params = json.loads(f.read())
 DWELL_TIME_SECONDS = manager_params['dwell_time']
+TIME_OUT = manager_params.get('timeout', 60)
 
 
 @app.agent(crawl_request_topic)
@@ -27,20 +30,20 @@ async def crawl(crawl_requests):
     async for crawl_request in crawl_requests:
         print(f'Receiving Request: {crawl_request.url}')
         driver = get_driver(crawl_request.visit_id, crawl_request.crawl_id)
-
+        driver.set_page_load_timeout(TIME_OUT)
+        tab_restart_browser(driver)
         try:
             driver.get(crawl_request.url)
-            try:
-                wait = WebDriverWait(driver, DWELL_TIME_SECONDS)
-                # We never expect this to happen, so should get x seconds wait
-                wait.until(EC.title_is(uuid.uuid4()), "Successful waiting completed")
-            except TimeoutException as e:
-                logger.info(e)
-                success = True
-        except WebDriverException as e:
+            # Sleep after get returns
+            time.sleep(DWELL_TIME_SECONDS)
+            logger.info("Sleep complete")
+            success = True
+        except (WebDriverException, TimeoutException) as e:
             logger.exception(e)
             success = False
         finally:
+            close_modals(driver)
+            close_other_windows(driver)
             driver.quit()
 
         result = CrawlResult(
