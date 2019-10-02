@@ -21,7 +21,6 @@ async def producer():
         reader = csv.reader(f)
         sites = [item for sublist in list(reader) for item in sublist]
 
-    sites = sites
     for u in sites:
         url = quote(f'http://{u}', safe=":/?=")
         visit_id = (uuid.uuid4().int & (1 << 53) - 1) - 2**52
