@@ -1,7 +1,9 @@
 {
-    "database_name": "crawls/crawl-data-test-1000-4.sqlite",
+    "crawl_name": "openwpm"
+    "database_name": "demo-data/crawl-data.sqlite",
     "testing": false,
-    "dwell_time": 10,
+    "dwell_time": 5,
+    "timeout": 20,
     "firefox_binary_path": "firefox-bin/firefox-bin",
     "kafka_broker": "kafka://localhost:9092"
 }

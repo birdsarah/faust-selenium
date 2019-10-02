@@ -10,6 +10,7 @@ from app import (
     logger,
     APPNAME,
     BROKER,
+    MAX_MESSAGE_SIZE,
     WebExtStart,
     webext_start_topic,
     webext_javascript_topic,
@@ -137,7 +138,7 @@ class Websockets(Service):
 
     @Service.task
     async def _background_server(self):
-        await websockets.serve(self.on_messages, self.bind, self.port)
+        await websockets.serve(self.on_messages, self.bind, self.port, max_size=MAX_MESSAGE_SIZE)
 
 
-app = WSApp(APPNAME, broker=BROKER, producer_max_request_size=4_000_000)
+app = WSApp(APPNAME, broker=BROKER, producer_max_request_size=MAX_MESSAGE_SIZE)

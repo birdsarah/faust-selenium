@@ -6,7 +6,8 @@ from selenium.webdriver.firefox.options import Options
 
 import configure_firefox
 from app import (
-    TESTING,
+    BROWSER_PARAMS_FILE,
+    MANAGER_PARAMS,
     logger,
 )
 
@@ -19,9 +20,7 @@ LOG_FILE = os.environ.get('GECKODRIVER_LOG_FILE', 'geckodriver.log')
 def get_driver(visit_id, crawl_id):
     root_dir = os.path.dirname(os.path.abspath(__file__))
 
-    browser_params = json.loads(open('browser_params.json').read())
-    manager_params = json.loads(open('manager_params.json').read())
-
+    browser_params = json.loads(open(BROWSER_PARAMS_FILE).read())
     browser_params['visit_id'] = visit_id
     browser_params['crawl_id'] = crawl_id
 
@@ -31,7 +30,7 @@ def get_driver(visit_id, crawl_id):
     fo = Options()
 
     # If testing we don't want headless and we do want jsconsole
-    if TESTING:
+    if MANAGER_PARAMS['testing']:
         browser_params['headless'] = False
         fo.add_argument('-jsconsole')
 
@@ -45,7 +44,7 @@ def get_driver(visit_id, crawl_id):
         fo.set_preference(name, value)
 
     # Set the binary
-    binary_path = manager_params['firefox_binary_path']
+    binary_path = MANAGER_PARAMS['firefox_binary_path']
     fo.binary = binary_path
     logger.info(f"OPENWPM: Browser Binary Path {binary_path}")
 
@@ -63,7 +62,7 @@ def get_driver(visit_id, crawl_id):
     extension_config = dict()
     extension_config.update(browser_params)
     extension_config['ws_address'] = ("127.0.0.1", 7799)
-    extension_config['testing'] = TESTING
+    extension_config['testing'] = MANAGER_PARAMS['testing']
     ext_config_file = os.path.join(profile_path, 'browser_params.json')
     with open(ext_config_file, 'w') as f:
         json.dump(extension_config, f)

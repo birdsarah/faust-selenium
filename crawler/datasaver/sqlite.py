@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import create_engine
 
 from app import (
+    MANAGER_PARAMS,
     app,
     crawl_result_topic,
     crawl_request_log_topic,
@@ -249,9 +250,7 @@ class DBWebExtHttpRedirect(Base):
 
 # Setup Database
 
-with open('manager_params.json', 'r') as f:
-    manager_params = json.loads(f.read())
-DATABASE_NAME = manager_params['database_name']
+DATABASE_NAME = MANAGER_PARAMS['database_name']
 
 engine = create_engine(f'sqlite:///{DATABASE_NAME}')
 Base.metadata.bind = engine

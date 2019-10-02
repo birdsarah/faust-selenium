@@ -1,4 +1,5 @@
 # Vim
+*.pid
 *.swp
 
 # Byte-compiled / optimized / DLL files

@@ -1,11 +1,11 @@
 import datetime
-import json
 import pytz
 import time
 
 from selenium.common.exceptions import WebDriverException, TimeoutException
 
 from app import (
+    MANAGER_PARAMS,
     app,
     crawl_request_topic,
     crawl_result_topic,
@@ -19,10 +19,8 @@ from browser_commands import (
     close_modals
 )
 
-with open('manager_params.json', 'r') as f:
-    manager_params = json.loads(f.read())
-DWELL_TIME_SECONDS = manager_params['dwell_time']
-TIME_OUT = manager_params.get('timeout', 60)
+DWELL_TIME_SECONDS = MANAGER_PARAMS['dwell_time']
+TIME_OUT = MANAGER_PARAMS.get('timeout', 60)
 
 
 @app.agent(crawl_request_topic)
