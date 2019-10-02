@@ -271,6 +271,7 @@ class KafkaLogHandler(logging.StreamHandler):
 # App
 app = faust.App(APPNAME, broker=BROKER, producer_max_request_size=MAX_MESSAGE_SIZE)
 crawl_request_topic = app.topic(f'{APPNAME}-crawl-request', value_type=CrawlRequest)
+crawl_request_log_topic = app.topic(f'{APPNAME}-crawl-request-log', value_type=CrawlRequest)
 crawl_result_topic = app.topic(f'{APPNAME}-crawl-result', value_type=CrawlResult)
 crawl_log_topic = app.topic(f'{APPNAME}-crawl-log', value_type=CrawlLog)
 webext_start_topic = app.topic(f'{APPNAME}-webext-start', value_type=WebExtStart)
@@ -279,7 +280,7 @@ webext_javascript_cookie_topic = app.topic(f'{APPNAME}-webext-javascript-cookie'
 webext_navigation_topic = app.topic(f'{APPNAME}-webext-navigation', value_type=WebExtNavigation)
 webext_http_request_topic = app.topic(f'{APPNAME}-webext-http-request', value_type=WebExtHttpRequest)
 webext_http_response_topic = app.topic(f'{APPNAME}-webext-http-response', value_type=WebExtHttpResponse)
-webext_http_response_content_topic = app.topic(f'{APPNAME}-webext-http-response-content', value_type=WebExtHttpResponseContent)
+webext_http_response_content_topic = app.topic(f'{APPNAME}-webext-http-response-content', value_type=WebExtHttpResponseContent)  # noqa
 webext_http_redirect_topic = app.topic(f'{APPNAME}-webext-http-redirect', value_type=WebExtHttpRedirect)
 
 # Logging
