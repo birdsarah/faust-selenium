@@ -5,6 +5,7 @@ import time
 import uuid
 
 from selenium.common.exceptions import WebDriverException, TimeoutException
+from urllib import parse
 
 from app import (
     MANAGER_PARAMS,
@@ -44,9 +45,26 @@ async def crawl(crawl_requests):
             time.sleep(DWELL_TIME_SECONDS)
             logger.info("Sleep complete")
             success = True
-        except (WebDriverException, TimeoutException) as e:
+            failure_type = ''
+            message = ''
+        except TimeoutException as e:
             logger.exception(e)
             success = False
+            failure_type = 'timeout'
+            message = e.message
+        except WebDriverException as e:
+            logger.exception(e)
+            success = False
+            failure_type = 'webdriver'
+            message = e.message
+            if message.startswith('Message: Reached error page:'):
+                try:
+                    parsed = parse.urlparse(message.replace('Message: Reached error page:', ''))
+                    qs = parse.parse_qs(parsed.query)
+                    failure_type = f'{parsed.path.strip()}:{qs["e"][0]}'
+                except:  # noqa
+                    # OK if we can't get out this extra detail
+                    pass
         finally:
             close_modals(driver)
             close_other_windows(driver)
@@ -54,7 +72,10 @@ async def crawl(crawl_requests):
         result = CrawlResult(
             request_id=crawl_request.request_id,
             visit_id=visit_id,
+            url=crawl_request.url,
             success=success,
-            time_stamp=str(datetime.datetime.now(pytz.utc))
+            time_stamp=str(datetime.datetime.now(pytz.utc)),
+            failure_type=failure_type,
+            message=message,
         )
         await crawl_result_topic.send(value=result)
