@@ -2,16 +2,18 @@ import asyncio
 import io
 import json
 import logging
+import os
 import time
 import traceback
 
 import faust
 
-with open('manager_params.json', 'r') as f:
-    manager_params = json.loads(f.read())
+BROWSER_PARAMS_FILE = os.environ.get('BROWSER_PARAMS_FILE', 'browser_params.json')
+manager_params_file = os.environ.get('MANAGER_PARAMS_FILE', 'manager_params.json')
+with open(manager_params_file, 'r') as f:
+    MANAGER_PARAMS = json.loads(f.read())
 
-TESTING = manager_params['testing']  # Reminder: testing halts websocket output
-BROKER = manager_params['kafka_broker']
+BROKER = MANAGER_PARAMS['kafka_broker']
 
 # This also needs to be set in the kafka configuration
 # https://stackoverflow.com/questions/21020347/how-can-i-send-large-messages-with-kafka-over-15mb
