@@ -51,7 +51,6 @@ async def crawl(crawl_requests):
             close_modals(driver)
             close_other_windows(driver)
             driver.quit()
-
         result = CrawlResult(
             request_id=crawl_request.request_id,
             visit_id=visit_id,

@@ -14,6 +14,7 @@ with open(manager_params_file, 'r') as f:
     MANAGER_PARAMS = json.loads(f.read())
 APPNAME = MANAGER_PARAMS['crawl_name']
 BROKER = MANAGER_PARAMS['kafka_broker']
+STORE = MANAGER_PARAMS['store']
 
 # This also needs to be set in the kafka configuration
 # https://stackoverflow.com/questions/21020347/how-can-i-send-large-messages-with-kafka-over-15mb
@@ -269,7 +270,14 @@ class KafkaLogHandler(logging.StreamHandler):
 # ---------------------------------------------------------------------
 
 # App
-app = faust.App(APPNAME, broker=BROKER, producer_max_request_size=MAX_MESSAGE_SIZE)
+app_settings = dict(
+    broker=BROKER,
+    producer_max_request_size=MAX_MESSAGE_SIZE,
+    store=STORE,
+    broker_commit_every=1,
+    stream_publish_on_commit=True,
+)
+app = faust.App(APPNAME, **app_settings)
 crawl_request_topic = app.topic(f'{APPNAME}-crawl-request', value_type=CrawlRequest)
 crawl_request_log_topic = app.topic(f'{APPNAME}-crawl-request-log', value_type=CrawlRequest)
 crawl_result_topic = app.topic(f'{APPNAME}-crawl-result', value_type=CrawlResult)

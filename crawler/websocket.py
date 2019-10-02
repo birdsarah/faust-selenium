@@ -12,6 +12,7 @@ from app import (
     APPNAME,
     BROKER,
     MAX_MESSAGE_SIZE,
+    STORE,
     WebExtStart,
     webext_start_topic,
     webext_javascript_topic,
@@ -143,4 +144,11 @@ class Websockets(Service):
         await websockets.serve(self.on_messages, self.bind, self.port, max_size=MAX_MESSAGE_SIZE)
 
 
-app = WSApp(APPNAME, broker=BROKER, producer_max_request_size=MAX_MESSAGE_SIZE)
+app_settings = dict(
+    broker=BROKER,
+    producer_max_request_size=MAX_MESSAGE_SIZE,
+    store=STORE,
+    broker_commit_every=50,
+    stream_publish_on_commit=True,
+)
+app = WSApp(APPNAME, **app_settings)
