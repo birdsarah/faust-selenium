@@ -1,9 +1,9 @@
 {
     "crawl_name": "openwpm"
-    "database_name": "demo-data/crawl-data.sqlite",
+    "database_name": "crawl-out-data/crawl-data.sqlite",
     "testing": false,
-    "dwell_time": 5,
-    "timeout": 20,
-    "firefox_binary_path": "C:\\Users\\Bird\\firefox-bin\\firefox.exe",
-    "kafka_broker": "kafka://192.168.1.136:9092"
+    "dwell_time": 10,
+    "timeout": 60,
+    "firefox_binary_path": "firefox-bin/firefox-bin"
+    "kafka_broker": "kafka://localhost:9092"
 }
