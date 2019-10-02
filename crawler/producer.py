@@ -23,10 +23,10 @@ async def producer():
 
     for u in sites:
         url = quote(f'http://{u}', safe=":/?=")
-        visit_id = (uuid.uuid4().int & (1 << 53) - 1) - 2**52
+        request_id = (uuid.uuid4().int & (1 << 53) - 1) - 2**52
         req = CrawlRequest(
             url=url,
-            visit_id=visit_id,
+            request_id=request_id,
             crawl_id=CRAWL_ID,
             time_stamp=str(datetime.datetime.now(pytz.utc))
         )

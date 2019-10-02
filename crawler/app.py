@@ -25,13 +25,14 @@ MAX_MESSAGE_SIZE = 1024 * 1024 * 40
 # ---------------------------------------------------------------------
 
 class CrawlRequest(faust.Record, serializer='json'):
-    visit_id: str
+    request_id: str
     crawl_id: str
     url: str
     time_stamp: str
 
 
 class CrawlResult(faust.Record, serializer='json'):
+    request_id: str
     visit_id: str
     success: bool
     time_stamp: str
