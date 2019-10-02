@@ -1,5 +1,6 @@
 import faust
 import json
+import os
 import websockets
 
 from mode import Service
@@ -29,6 +30,7 @@ from app import (
     WebExtHttpRedirect,
 )
 
+WS_PORT = int(os.environ.get('WS_PORT', 7799))
 
 instrument_type_map = {
     'javascript': {
@@ -61,7 +63,7 @@ instrument_type_map = {
 class WSApp(faust.App):
 
     def on_init(self):
-        self.websockets = Websockets(self)
+        self.websockets = Websockets(self, port=WS_PORT)
 
     async def on_start(self):
         await self.add_runtime_dependency(self.websockets)

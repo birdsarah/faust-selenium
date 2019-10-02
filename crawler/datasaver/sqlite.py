@@ -31,7 +31,7 @@ class DBCrawlRequest(Base):
     __tablename__ = 'crawl_requests'
 
     id = Column(Integer(), primary_key=True, auto_increment=True)
-    visit_id = Column(String(256), nullable=False)
+    request_id = Column(String(256), nullable=False)
     crawl_id = Column(String(256), nullable=False)
     url = Column(Text(), nullable=False)
     time_stamp = Column(String(256), nullable=False)
@@ -41,6 +41,7 @@ class DBCrawlResult(Base):
     __tablename__ = 'crawl_results'
 
     id = Column(Integer(), primary_key=True, auto_increment=True)
+    request_id = Column(String(256), nullable=False)
     visit_id = Column(String(256), nullable=False)
     success = Column(Boolean(), nullable=False)
     time_stamp = Column(String(256), nullable=False)

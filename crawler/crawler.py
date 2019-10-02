@@ -1,6 +1,8 @@
 import datetime
+import os
 import pytz
 import time
+import uuid
 
 from selenium.common.exceptions import WebDriverException, TimeoutException
 
@@ -21,13 +23,19 @@ from browser_commands import (
 
 DWELL_TIME_SECONDS = MANAGER_PARAMS['dwell_time']
 TIME_OUT = MANAGER_PARAMS.get('timeout', 60)
+WS_PORT = int(os.environ.get('WS_PORT', 7799))
 
 
 @app.agent(crawl_request_topic)
 async def crawl(crawl_requests):
     async for crawl_request in crawl_requests:
         print(f'Receiving Request: {crawl_request.url}')
-        driver = get_driver(crawl_request.visit_id, crawl_request.crawl_id)
+        visit_id = (uuid.uuid4().int & (1 << 53) - 1) - 2**52
+        driver = get_driver(
+            visit_id=visit_id,
+            crawl_id=crawl_request.crawl_id,
+            ws_port=WS_PORT,
+        )
         driver.set_page_load_timeout(TIME_OUT)
         tab_restart_browser(driver)
         try:
@@ -45,7 +53,8 @@ async def crawl(crawl_requests):
             driver.quit()
 
         result = CrawlResult(
-            visit_id=crawl_request.visit_id,
+            request_id=crawl_request.request_id,
+            visit_id=visit_id,
             success=success,
             time_stamp=str(datetime.datetime.now(pytz.utc))
         )

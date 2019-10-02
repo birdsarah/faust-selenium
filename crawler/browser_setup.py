@@ -17,7 +17,7 @@ DEFAULT_SCREEN_RES = (1366, 768)
 LOG_FILE = os.environ.get('GECKODRIVER_LOG_FILE', 'geckodriver.log')
 
 
-def get_driver(visit_id, crawl_id):
+def get_driver(visit_id, crawl_id, ws_port):
     root_dir = os.path.dirname(os.path.abspath(__file__))
 
     browser_params = json.loads(open(BROWSER_PARAMS_FILE).read())
@@ -61,7 +61,7 @@ def get_driver(visit_id, crawl_id):
     # Write extension config file
     extension_config = dict()
     extension_config.update(browser_params)
-    extension_config['ws_address'] = ("127.0.0.1", 7799)
+    extension_config['ws_address'] = ("127.0.0.1", ws_port)
     extension_config['testing'] = MANAGER_PARAMS['testing']
     ext_config_file = os.path.join(profile_path, 'browser_params.json')
     with open(ext_config_file, 'w') as f:
