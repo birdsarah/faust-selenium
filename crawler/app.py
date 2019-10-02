@@ -36,7 +36,11 @@ class CrawlResult(faust.Record, serializer='json'):
     request_id: str
     visit_id: str
     success: bool
+    url: str
     time_stamp: str
+    # Optional fields
+    failure_type: str = ''
+    message: str = ''
 
 
 class CrawlLog(faust.Record, serializer='json'):

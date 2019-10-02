@@ -43,8 +43,11 @@ class DBCrawlResult(Base):
     id = Column(Integer(), primary_key=True, auto_increment=True)
     request_id = Column(String(256), nullable=False)
     visit_id = Column(String(256), nullable=False)
+    url = Column(Text(), nullable=False)
     success = Column(Boolean(), nullable=False)
     time_stamp = Column(String(256), nullable=False)
+    failure_type = Column(Text(), nullable=False)
+    message = Column(Text(), nullable=False)
 
 
 class DBLog(Base):
