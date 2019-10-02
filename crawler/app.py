@@ -12,7 +12,7 @@ BROWSER_PARAMS_FILE = os.environ.get('BROWSER_PARAMS_FILE', 'browser_params.json
 manager_params_file = os.environ.get('MANAGER_PARAMS_FILE', 'manager_params.json')
 with open(manager_params_file, 'r') as f:
     MANAGER_PARAMS = json.loads(f.read())
-
+APPNAME = MANAGER_PARAMS['crawl_name']
 BROKER = MANAGER_PARAMS['kafka_broker']
 
 # This also needs to be set in the kafka configuration
@@ -268,7 +268,6 @@ class KafkaLogHandler(logging.StreamHandler):
 # ---------------------------------------------------------------------
 
 # App
-APPNAME = 'openwpm'
 app = faust.App(APPNAME, broker=BROKER, producer_max_request_size=MAX_MESSAGE_SIZE)
 crawl_request_topic = app.topic('crawl-request', value_type=CrawlRequest)
 crawl_request_log_topic = app.topic('crawl-request-log', value_type=CrawlRequest)

@@ -27,11 +27,21 @@ parent kafka-properties directory.
   * All the ins-and-outs of db performance and writing:
     * Batches help a lot. For now only starting 1 datasaver worker.
 
+Manager params contain important setup values. The crawl_name parameter
+provides a namespace to kafka/faust allowing parallelization of crawls e.g.
+ensuring that windows requests picked up by windows crawl while linux requests
+are picked up by linux crawl.
+
+To setup a crawl all that should be necessary is to configure a manager_params
+and supervisord conf file.
+
 Windows instructions:
 * Use seperate windows environment.yaml
 * Set firefox_binary_path to something like `"C:\\Users\\Bird\\firefox-bin\\firefox.exe"`
 * So far only tested with kafka launched on linux, along with some workers and windows launching websocket, geckodriver, and crawler workers.
 * When working with kafka on remote setup need to make sure kafka is accessible from outside IP addresses by setting advertised.host.name and host.name in config/server.properties. And in manager_params, update kafka_broker to the remote ip address.
+* Supervisor is not available for windows so crawler processes need to be
+    started manually. Make sure the params file matches.
 
 Notes
 * Kafka - Can only parallelize for as many partitions as you have, so if you want to have 100 crawlers, make sure the crawl_request topic has 100 partitions.
