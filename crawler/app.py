@@ -13,6 +13,10 @@ with open('manager_params.json', 'r') as f:
 TESTING = manager_params['testing']  # Reminder: testing halts websocket output
 BROKER = manager_params['kafka_broker']
 
+# This also needs to be set in the kafka configuration
+# https://stackoverflow.com/questions/21020347/how-can-i-send-large-messages-with-kafka-over-15mb
+MAX_MESSAGE_SIZE = 1024 * 1024 * 40
+
 
 # ---------------------------------------------------------------------
 # Faust Records
@@ -263,7 +267,7 @@ class KafkaLogHandler(logging.StreamHandler):
 
 # App
 APPNAME = 'openwpm'
-app = faust.App(APPNAME, broker=BROKER, producer_max_request_size=4_000_000)
+app = faust.App(APPNAME, broker=BROKER, producer_max_request_size=MAX_MESSAGE_SIZE)
 crawl_request_topic = app.topic('crawl-request', value_type=CrawlRequest)
 crawl_request_log_topic = app.topic('crawl-request-log', value_type=CrawlRequest)
 crawl_result_topic = app.topic('crawl-result', value_type=CrawlResult)

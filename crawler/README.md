@@ -4,23 +4,19 @@ Set your topic partitions in kafka settings or manually create topics with
 desired numbers of partitions. I haven't investigated all the performance
 parameters. BUT you need to have at least as many partitions as you want
 workers that will work on that topic. In particular if we want 100 crawler
-workers the topic 'crawl-request' needs at least 100 workers.
+workers the topic 'crawl-request' needs at least 100 partitions.
 
-Apparently you need to specify the port manually. On kubernetes this won't be
-an issue as each worker will be in their own pod.
+Also need to make sure the kafka max message size is sufficiently large for the
+messages that come up via openwpm. Examples of kafka producer settings are in
+parent kafka-properties directory.
 
-* Launch kafka
-* Activate environment
-* From this directory launch workers. You can launch multiple for each type (esp crawler):
-  * faust -A datasaver.sqlite worker -l info -p 6066
-  * faust -A websocket worker -l info -p 6068 (note the port here is not the WS port it's the worker port)
-  * faust -A crawler worker -l info -p 6083 (as many of these as you want to parallelize)
-  * faust -A geckodriver_log_reader -l info -p 6081
-  * When everything's ready, launch the producer:   
-    * faust -A producer worker -l info -p 6067
+* Activate faust-selenium conda environment:
+  * conda activate faust-selenium
+
+* Use supervisord (installed via conda) to launch all processes:
+  * supervisord -c crawler.conf
 
 * To use simple_producer for testing:
-  * faust -A simple_producer worker -l info -p 6067
   * faust -A simple_producer send simple_request '{"url": "http://somewhere-to-crawl.com"}'
 
 * Have not yet figured out:
