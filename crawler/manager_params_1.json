@@ -5,5 +5,6 @@
     "dwell_time": 10,
     "timeout": 60,
     "firefox_binary_path": "firefox-bin/firefox-bin",
-    "kafka_broker": "kafka://localhost:9092"
+    "kafka_broker": "kafka://localhost:9092",
+    "store": "rocksdb://"
 }
