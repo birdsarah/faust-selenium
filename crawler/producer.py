@@ -6,7 +6,7 @@ import uuid
 from urllib.parse import quote
 
 from app import (
-    APPNAME
+    APPNAME,
     app,
     crawl_request_topic,
     crawl_request_log_topic,
