@@ -51,12 +51,12 @@ async def crawl(crawl_requests):
             logger.exception(e)
             success = False
             failure_type = 'timeout'
-            message = e.message
+            message = e.msg
         except WebDriverException as e:
             logger.exception(e)
             success = False
             failure_type = 'webdriver'
-            message = e.message
+            message = e.msg
             if message.startswith('Message: Reached error page:'):
                 try:
                     parsed = parse.urlparse(message.replace('Message: Reached error page:', ''))
