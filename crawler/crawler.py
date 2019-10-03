@@ -57,9 +57,9 @@ async def crawl(crawl_requests):
             success = False
             failure_type = 'webdriver'
             message = e.msg
-            if message.startswith('Message: Reached error page:'):
+            if message.startswith('Reached error page:'):
                 try:
-                    parsed = parse.urlparse(message.replace('Message: Reached error page:', ''))
+                    parsed = parse.urlparse(message.replace('Reached error page:', ''))
                     qs = parse.parse_qs(parsed.query)
                     failure_type = f'{parsed.path.strip()}:{qs["e"][0]}'
                 except:  # noqa
