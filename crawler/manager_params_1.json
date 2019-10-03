@@ -3,7 +3,7 @@
     "database_name": "crawl-out-data/crawl-data-1.sqlite",
     "testing": false,
     "dwell_time": 10,
-    "timeout": 30,
+    "timeout": 60,
     "firefox_binary_path": "firefox-bin/firefox-bin",
     "kafka_broker": "kafka://10.128.0.46:9092",
     "store": "rocksdb://"

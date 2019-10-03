@@ -42,7 +42,7 @@ async def crawl(crawl_requests):
         try:
             driver.get(crawl_request.url)
             # Sleep after get returns
-            time.sleep(DWELL_TIME_SECONDS)
+            time.sleep(DWELL_TIME_SECONDS * 1.5)
             logger.info("Sleep complete")
             success = True
             failure_type = ''
