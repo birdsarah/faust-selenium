@@ -6,14 +6,14 @@ import uuid
 from urllib.parse import quote
 
 from app import (
+    APPNAME,
     app,
     crawl_request_topic,
     crawl_request_log_topic,
     CrawlRequest,
 )
 
-CRAWL_ID = (uuid.uuid4().int & (1 << 32) - 1) - 2**31
-
+CRAWL_ID = APPNAME
 
 @app.task
 async def producer():
