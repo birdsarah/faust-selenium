@@ -31,6 +31,7 @@ thread_pool = ThreadPoolExecutor(max_workers=1)
 
 
 def do_crawl(driver, url):
+    exceptions = []
     driver.set_page_load_timeout(TIME_OUT)
     try:
         tab_restart_browser(driver)
@@ -41,12 +42,12 @@ def do_crawl(driver, url):
         failure_type = ''
         message = ''
     except TimeoutException as e:
-        logger.exception(e)
+        exceptions.append(e)
         success = False
         failure_type = 'timeout'
         message = e.msg
     except WebDriverException as e:
-        logger.exception(e)
+        exceptions.append(e)
         success = False
         failure_type = 'webdriver'
         message = e.msg
@@ -63,7 +64,7 @@ def do_crawl(driver, url):
         close_modals(driver)
         close_other_windows(driver)
         driver.quit()
-    return success, failure_type, message
+    return success, failure_type, message, exceptions
 
 
 @app.agent(crawl_request_topic)
@@ -75,25 +76,23 @@ async def crawl(crawl_requests):
             thread_pool,
             partial(
                 get_driver,
-                data=dict(
-                    visit_id=visit_id,
-                    crawl_id=crawl_request.crawl_id,
-                    ws_port=WS_PORT,
-                )
+                visit_id=visit_id,
+                crawl_id=crawl_request.crawl_id,
+                ws_port=WS_PORT,
             )
         )
         for log in logs:
             logger.info(log)
-        success, failure_type, message = await app.loop.run_in_executor(
+        success, failure_type, message, exceptions = await app.loop.run_in_executor(
             thread_pool,
             partial(
                 do_crawl,
-                data=dict(
-                    driver=driver,
-                    url=crawl_request.url
-                )
+                driver=driver,
+                url=crawl_request.url
             )
         )
+        for e in exceptions:
+            logger.exception(e)
         result = CrawlResult(
             request_id=crawl_request.request_id,
             visit_id=visit_id,
