@@ -36,8 +36,9 @@ def do_crawl(driver, url):
     try:
         tab_restart_browser(driver)
         driver.get(url)
-        # Sleep after get returns
-        time.sleep(DWELL_TIME_SECONDS)
+        # Sleep after get returns (for a little longer than dwell time to
+        # make sure all messages in time frame appear)
+        time.sleep(DWELL_TIME_SECONDS * 1.3)
         success = True
         failure_type = ''
         message = ''
