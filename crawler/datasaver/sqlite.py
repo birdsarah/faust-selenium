@@ -1,6 +1,7 @@
 import json
 
 from base64 import b64decode
+from concurrent.futures import ThreadPoolExecutor
 from itertools import groupby
 from sqlalchemy import Column, Integer, Text, String, Boolean, ForeignKey, DateTime, BLOB  # noqa
 from sqlalchemy.ext.declarative import declarative_base
@@ -25,6 +26,7 @@ from app import (
 
 Session = sessionmaker()
 Base = declarative_base()
+thread_pool = ThreadPoolExecutor(max_workers=1)
 
 
 class DBCrawlRequest(Base):
@@ -264,30 +266,38 @@ Base.metadata.create_all()
 
 # Faust work to save data
 
-def _atomic_add(items):
+def __atomic_adds(items):
     session = Session()
     session.add_all(items)
     session.commit()
     session.close()
 
 
+def _atomic_add(items, item_type=''):
+    print(f'Saving {item_type} items')
+    app.loop.run_in_executor(thread_pool, __atomic_adds, items)
+
+
 @app.agent(crawl_request_log_topic)
 async def crawl_request_to_sql(stream):
+    t = 'crawl_request'
     async for batch in stream.take(20, within=5):
         items = [DBCrawlRequest(**crawl_request.asdict()) for crawl_request in batch]
-        _atomic_add(items)
+        _atomic_add(items, t)
 
 
 @app.agent(crawl_result_topic)
 async def crawl_result_to_sql(stream):
+    t = 'crawl_result'
     async for batch in stream.take(20, within=5):
         items = [DBCrawlResult(**msg.asdict()) for msg in batch]
-        _atomic_add(items)
+        _atomic_add(items, t)
 
 
 @app.agent(crawl_log_topic)
 async def logs_to_sql(stream):
     # TODO - make this only save for a specific user specified log-level
+    t = 'log'
     async for batch in stream.take(100, within=10):
         # Extract log body from log kafka message
         items = []
@@ -296,49 +306,55 @@ async def logs_to_sql(stream):
                 log.asdict()['log']
             )
             items.append(DBLog(**log_body))
-        _atomic_add(items)
+        _atomic_add(items, t)
 
 
 @app.agent(webext_start_topic)
 async def webext_start_to_sql(stream):
+    t = 'webext_start'
     async for batch in stream.take(20, within=5):
         items = [DBWebExtStart(**msg.asdict()) for msg in batch]
-        _atomic_add(items)
+        _atomic_add(items, t)
 
 
 @app.agent(webext_javascript_topic)
 async def webext_javascript_to_sql(stream):
+    t = 'webext_javascript'
     async for batch in stream.take(100, within=10):
         items = [DBWebExtJavascript(**msg.asdict()) for msg in batch]
-        _atomic_add(items)
+        _atomic_add(items, t)
 
 
 @app.agent(webext_javascript_cookie_topic)
 async def webext_javascript_cookie_to_sql(stream):
+    t = 'webext_javascript_cookie'
     async for batch in stream.take(100, within=10):
         items = [DBWebExtJavascriptCookie(**msg.asdict()) for msg in batch]
-        _atomic_add(items)
+        _atomic_add(items, t)
 
 
 @app.agent(webext_navigation_topic)
 async def webext_navigation_to_sql(stream):
+    t = 'webext_navigation'
     async for batch in stream.take(100, within=10):
         items = [DBWebExtNavigation(**msg.asdict()) for msg in batch]
-        _atomic_add(items)
+        _atomic_add(items, t)
 
 
 @app.agent(webext_http_request_topic)
 async def webext_http_request_to_sql(stream):
+    t = 'webext_http_request'
     async for batch in stream.take(100, within=10):
         items = [DBWebExtHttpRequest(**msg.asdict()) for msg in batch]
-        _atomic_add(items)
+        _atomic_add(items, t)
 
 
 @app.agent(webext_http_response_topic)
 async def webext_http_response_to_sql(stream):
+    t = 'webext_http_response'
     async for batch in stream.take(100, within=10):
         items = [DBWebExtHttpResponse(**msg.asdict()) for msg in batch]
-        _atomic_add(items)
+        _atomic_add(items, t)
 
 
 def _decode_content_message(msg):
@@ -359,7 +375,8 @@ async def webext_http_response_content_to_sql(stream):
     Converts the content from b64 as it arrived to decoded content
     before storage.
     """
-    async for batch in stream.take(100, within=10):
+    t = 'webext_http_request_content'
+    async for batch in stream.take(5, within=10):
         # De-dupe by content hash
         # (this won't be perfect due to stream batching, but will do to save space)
         deduped = [next(v) for k, v in groupby(
@@ -367,11 +384,12 @@ async def webext_http_response_content_to_sql(stream):
         )]
         # Decode b64 and add length before committing
         items = [DBWebExtHttpResponseContent(**_decode_content_message(msg)) for msg in deduped]
-        _atomic_add(items)
+        _atomic_add(items, t)
 
 
 @app.agent(webext_http_redirect_topic)
 async def webext_http_redirect_to_sql(stream):
+    t = 'webext_http_redirect'
     async for batch in stream.take(100, within=10):
         items = [DBWebExtHttpRedirect(**msg.asdict()) for msg in batch]
-        _atomic_add(items)
+        _atomic_add(items, t)
