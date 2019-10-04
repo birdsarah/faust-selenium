@@ -1,5 +1,5 @@
 {
-    "crawl_name": "crawl_2",
+    "crawl_name": "crawl_500_2",
     "database_name": "crawl-out-data/crawl-2-data.sqlite",
     "testing": false,
     "dwell_time": 10,
