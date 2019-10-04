@@ -1,5 +1,5 @@
+import csv
 import datetime
-import json
 import pytz
 import uuid
 
@@ -13,15 +13,17 @@ from app import (
     CrawlRequest,
 )
 
-# CRAWL_ID = (uuid.uuid4().int & (1 << 32) - 1) - 2**31
 CRAWL_ID = APPNAME
-
 
 @app.task
 async def producer():
-    url_list = json.load(open('sample_of_js_cookies_sites_200.csv', 'r'))
-    for u in url_list:
-        url = quote(u, safe=":/?=")
+    with open('alexatop1k.csv', 'r') as f:
+        reader = csv.reader(f)
+        sites = [item for sublist in list(reader) for item in sublist]
+
+    sites = sites[0:10]
+    for u in sites:
+        url = quote(f'http://{u}', safe=":/?=")
         request_id = (uuid.uuid4().int & (1 << 53) - 1) - 2**52
         req = CrawlRequest(
             url=url,
