@@ -103,6 +103,7 @@ async def crawl(crawl_requests):
                 url=crawl_request.url
             )
         )
+        print(f'Finishing Request: {crawl_request.url}')
         for e in exceptions:
             logger.exception(e)
         result = CrawlResult(
