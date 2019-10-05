@@ -58,6 +58,14 @@ Crawler
     tmux
     conda activate faust-selenium
     cd crawler
+    UNBRANDED_FF69_RELEASE_LINUX_BUILD="https://queue.taskcluster.net/v1/task/TSw-9H80SrqYLYJIYTXGVg/runs/0/artifacts/public/build/target.tar.bz2"
+    wget "$UNBRANDED_FF69_RELEASE_LINUX_BUILD"
+    tar jxf target.tar.bz2
+    rm -rf firefox-bin
+    mv firefox firefox-bin
+    rm target.tar.bz2
+    gsutil cp <location-of-xpi> .
+    supervisord -c ...
 
 
 
