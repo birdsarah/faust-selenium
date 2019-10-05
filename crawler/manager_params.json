@@ -2,7 +2,7 @@
     "crawl_name": "openwpm",
     "database_name": "demo-data/crawl-data.sqlite",
     "testing": false,
-    "dwell_time": 5,
+    "dwell_time": 10,
     "timeout": 20,
     "firefox_binary_path": "firefox-bin/firefox-bin",
     "kafka_broker": [
