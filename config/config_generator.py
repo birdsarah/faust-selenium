@@ -20,7 +20,7 @@ def render():
         geckodriver_log_file=log('geckodriver.log'),
         firefox_binary_path=FIREFOX_BINARY_PATH,
         extension_path=EXTENSION_PATH,
-        display=':99',
+        #display=':99',
         n_crawlers=2,
     )
     print(result)
