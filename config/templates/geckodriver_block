@@ -1,0 +1,4 @@
+[program:geckodriver-log-reader]
+command=faust -A crawler.geckodriver_log_reader worker -p 6061
+stdout_logfile=logs/crawler/geckodriver_out.log
+stderr_logfile=logs/crawler/geckodriver_err.log

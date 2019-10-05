@@ -1,0 +1,23 @@
+[supervisord]
+nodaemon=true
+environment=
+    PYTHONPATH="$PYTHONPATH:crawler",
+    {% if browser_params_file %}
+    BROWSER_PARAMS_FILE="{{ browser_params_file }}",
+    {% endif %}
+    {% if manager_params_file %}
+    MANAGER_PARAMS_FILE="{{ manager_params_file }}",
+    {% endif %}
+    {% if geckodriver_log_file %}
+    GECKODRIVER_LOG_FILE="{{ geckodriver_log_file }}",
+    {% endif %}
+    {% if firefox_binary_path %}
+    FIREFOX_BINARY_PATH="{{ firefox_binary_path }}",
+    {% endif %}
+    {% if extension_path %}
+    EXTENSION_PATH="{{ extension_path }}",
+    {% endif %}
+    {% if display %}
+    DISPLAY="{{ display }}",
+    {% endif %}
+

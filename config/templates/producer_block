@@ -1,0 +1,5 @@
+[program:producer]
+command=faust -A crawler.producer worker -p 6071
+priority=300
+stdout_logfile=logs/crawler/producer_out.log
+stderr_logfile=logs/crawler/producer_err.log

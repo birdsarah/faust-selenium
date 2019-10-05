@@ -1,0 +1,14 @@
+# -- start crawler {{n}}
+[program:crawler-{{n}}]
+command=faust -A crawler.crawler worker -p 608{{n}}
+stdout_logfile=logs/crawler/crawler{{n}}_out.log
+stderr_logfile=logs/crawler/crawler{{n}}_err.log
+environment=
+    WS_PORT="600{{n}}",
+[program:websocket-{{n}}]
+command=faust -A crawler.websocket worker -p 609{{n}}
+stdout_logfile=logs/crawler/ws{{n}}_out.log
+stderr_logfile=logs/crawler/ws{{n}}_err.log
+environment=
+    WS_PORT="600{{n}}",
+# -- end crawler {{n}}

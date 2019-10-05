@@ -1,0 +1,3 @@
+[program:simple-producer]
+command=faust -A crawler.simple_producer worker -p 6070
+priority=300
