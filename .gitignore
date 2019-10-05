@@ -1,3 +1,7 @@
+app/*
+data/*
+logs/*
+
 # Vim
 *.pid
 *.swp
