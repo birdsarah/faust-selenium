@@ -9,7 +9,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import create_engine
 
 from app import (
-    MANAGER_PARAMS,
     app,
     crawl_result_topic,
     crawl_request_log_topic,
@@ -23,6 +22,7 @@ from app import (
     webext_http_response_content_topic,
     webext_http_redirect_topic,
 )
+from config import get_manager_config
 
 Session = sessionmaker()
 Base = declarative_base()
@@ -269,7 +269,7 @@ class DBWebExtHttpRedirect(Base):
 
 # Setup Database
 
-DATABASE_NAME = MANAGER_PARAMS['database_name']
+DATABASE_NAME = get_manager_config('database_name')
 
 engine = create_engine(f'sqlite:///{DATABASE_NAME}')
 Base.metadata.bind = engine

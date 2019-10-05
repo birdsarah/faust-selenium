@@ -79,6 +79,8 @@ Crawler
 
 * When unbranded firefox is available on conda-forge, use it
 * Package
+* Add a check on start-up for critical parameters and fail out early
+* Add retries to crawl request and retry on crawl fail
 
 
 ---
