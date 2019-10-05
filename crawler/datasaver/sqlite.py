@@ -71,6 +71,7 @@ class DBWebExtStart(Base):
     id = Column(Integer(), primary_key=True, auto_increment=True)
     visit_id = Column(String(256), nullable=False)
     crawl_id = Column(String(256), nullable=False)
+    time_stamp = Column(String(256), nullable=False)
 
 
 class DBWebExtJavascript(Base):

@@ -50,6 +50,7 @@ class CrawlLog(faust.Record, serializer='json'):
 class WebExtStart(faust.Record, serializer='json'):
     visit_id: str
     crawl_id: str
+    time_stamp: str
 
 
 class WebExtJavascript(faust.Record, serializer='json'):
