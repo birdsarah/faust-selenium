@@ -11,3 +11,4 @@ dependencies:
     - websockets
     - pip:
       - faust
+      - supervisor-win

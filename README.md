@@ -33,7 +33,7 @@ loading into the browser. (See OpenWPM repo for info on installation)
 
 On a fresh node
 
-    sudo apt install -y git 
+    sudo apt install -y git default-jdk tmux
     git clone https://github.com/birdsarah/faust-selenium.git
     wget https://www-us.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz
     tar xzvf kafka_2.12-2.3.0.tgz
@@ -43,12 +43,23 @@ On a fresh node
     source ~/.bashrc
     cd faust-selenium
     conda env create -f environment.yaml
-    conda activate faust-selenium
+
+Install monitoring agent if needed: [https://app.google.stackdriver.com/settings/accounts/agent]
 
 Zookeeper and kafka (update supervisord conf files depending on cluster config)
 
+    tmux  # so we can disconnect (could also use supervisor as a daemon)
+    conda activate faust-selenium
     cd kafka
     supervisord -c kafka.conf (or as appropriate)
+
+Crawler
+
+    tmux
+    conda activate faust-selenium
+    cd crawler
+
+
 
 
 
