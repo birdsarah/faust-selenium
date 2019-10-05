@@ -147,6 +147,7 @@ class Websockets(Service):
 app_settings = dict(
     broker=BROKER,
     producer_max_request_size=MAX_MESSAGE_SIZE,
+    consumer_max_fetch_size=MAX_MESSAGE_SIZE,
     store=STORE,
     process_guarantee="exactly_once",
 )
