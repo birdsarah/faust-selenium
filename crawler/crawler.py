@@ -1,5 +1,4 @@
 import datetime
-import os
 import pytz
 import time
 import uuid
@@ -10,7 +9,6 @@ from selenium.common.exceptions import WebDriverException, TimeoutException
 from urllib import parse
 
 from app import (
-    MANAGER_PARAMS,
     app,
     crawl_request_topic,
     crawl_result_topic,
@@ -23,10 +21,11 @@ from browser_commands import (
     close_other_windows,
     close_modals
 )
+from config import get_manager_config
 
-DWELL_TIME_SECONDS = MANAGER_PARAMS['dwell_time']
-TIME_OUT = MANAGER_PARAMS.get('timeout', 60)
-WS_PORT = int(os.environ.get('WS_PORT', 7799))
+DWELL_TIME_SECONDS = get_manager_config('dwell_time')
+TIME_OUT = get_manager_config('timeout', 60)
+WS_PORT = int(get_manager_config('WS_PORT', 7799))
 thread_pool = ThreadPoolExecutor(max_workers=1)
 
 
@@ -103,6 +102,7 @@ async def crawl(crawl_requests):
                 url=crawl_request.url
             )
         )
+        print(f'Finishing Request: {crawl_request.url}')
         for e in exceptions:
             logger.exception(e)
         result = CrawlResult(

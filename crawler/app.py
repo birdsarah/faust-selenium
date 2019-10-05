@@ -2,19 +2,16 @@ import asyncio
 import io
 import json
 import logging
-import os
 import time
 import traceback
 
 import faust
 
-BROWSER_PARAMS_FILE = os.environ.get('BROWSER_PARAMS_FILE', 'browser_params.json')
-manager_params_file = os.environ.get('MANAGER_PARAMS_FILE', 'manager_params.json')
-with open(manager_params_file, 'r') as f:
-    MANAGER_PARAMS = json.loads(f.read())
-APPNAME = MANAGER_PARAMS['crawl_name']
-BROKER = MANAGER_PARAMS['kafka_broker']
-STORE = MANAGER_PARAMS['store']
+from config import get_manager_config
+
+APPNAME = get_manager_config('crawl_name')
+BROKER = get_manager_config('kafka_broker')
+STORE = get_manager_config('store')
 
 # This also needs to be set in the kafka configuration
 # https://stackoverflow.com/questions/21020347/how-can-i-send-large-messages-with-kafka-over-15mb

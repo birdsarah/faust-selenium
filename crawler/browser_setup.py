@@ -5,23 +5,19 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
 import configure_firefox
-from app import (
-    BROWSER_PARAMS_FILE,
-    MANAGER_PARAMS,
-)
+from config import get_manager_config
 
 
 DEFAULT_SCREEN_RES = (1366, 768)
 # TODO Work with command line argument / config file
-LOG_FILE = os.environ.get('GECKODRIVER_LOG_FILE', 'geckodriver.log')
+LOG_FILE = get_manager_config('geckodriver_log_file')
 
 
 def get_driver(visit_id, crawl_id, ws_port):
     logs = []
 
-    root_dir = os.path.dirname(os.path.abspath(__file__))
-
-    browser_params = json.loads(open(BROWSER_PARAMS_FILE).read())
+    browser_params_file = get_manager_config('browser_params_file')
+    browser_params = json.loads(open(browser_params_file).read())
     browser_params['visit_id'] = visit_id
     browser_params['crawl_id'] = crawl_id
 
@@ -31,7 +27,7 @@ def get_driver(visit_id, crawl_id, ws_port):
     fo = Options()
 
     # If testing we don't want headless and we do want jsconsole
-    if MANAGER_PARAMS['testing']:
+    if get_manager_config('testing'):
         browser_params['headless'] = False
         fo.add_argument('-jsconsole')
 
@@ -45,7 +41,8 @@ def get_driver(visit_id, crawl_id, ws_port):
         fo.set_preference(name, value)
 
     # Set the binary
-    binary_path = MANAGER_PARAMS['firefox_binary_path']
+    binary_path = get_manager_config('firefox_binary_path')
+    assert os.path.exists(binary_path), f'Binary not found at: {binary_path}'
     fo.binary = binary_path
     logs.append(f"OPENWPM: Browser Binary Path {binary_path}")
 
@@ -63,15 +60,15 @@ def get_driver(visit_id, crawl_id, ws_port):
     extension_config = dict()
     extension_config.update(browser_params)
     extension_config['ws_address'] = ("127.0.0.1", ws_port)
-    extension_config['testing'] = MANAGER_PARAMS['testing']
+    extension_config['testing'] = get_manager_config('testing')
     ext_config_file = os.path.join(profile_path, 'browser_params.json')
     with open(ext_config_file, 'w') as f:
         json.dump(extension_config, f)
 
     # Load extension
-    ext_loc = os.path.join(root_dir, 'openwpm.xpi')
-    ext_loc = os.path.normpath(ext_loc)
-    driver.install_addon(ext_loc, temporary=True)
+    extension_path = get_manager_config('extension_path')
+    assert os.path.exists(extension_path), f'Extension not found at: {extension_path}'
+    driver.install_addon(extension_path, temporary=True)
     logs.append("OPENWPM: OpenWPM Firefox extension loaded")
 
     return driver, logs
