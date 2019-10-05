@@ -32,13 +32,14 @@ thread_pool = ThreadPoolExecutor(max_workers=1)
 
 def do_crawl(driver, url):
     exceptions = []
-    driver.set_page_load_timeout(TIME_OUT)
     try:
+        driver.set_page_load_timeout(TIME_OUT)
         tab_restart_browser(driver)
         driver.get(url)
-        # Sleep after get returns (for a little longer than dwell time to
-        # make sure all messages in time frame appear)
+        # Sleep after get returns (for a little longer than dwell time to make sure all messages in time frame appear)
         time.sleep(DWELL_TIME_SECONDS * 1.3)
+        close_modals(driver)
+        close_other_windows(driver)
         success = True
         failure_type = ''
         message = ''
@@ -57,14 +58,24 @@ def do_crawl(driver, url):
                 parsed = parse.urlparse(message.replace('Reached error page:', ''))
                 qs = parse.parse_qs(parsed.query)
                 failure_type = f'{parsed.path.strip()}:{qs["e"][0]}'
-            except:  # noqa
+            except Exception:
                 # OK if we can't get out this extra detail
                 pass
+    except Exception as e:
+        # Something went very wrong if we end up here
+        exceptions.append(e)
+        success = False
+        failure_type = 'crawl_other'
+        message = str(e)
     finally:
-        # How much problem that this isn't defensive?
-        close_modals(driver)
-        close_other_windows(driver)
-        driver.quit()
+        try:
+            driver.quit()
+        except Exception as e:
+            # Something went very wrong if we end up here
+            exceptions.append(e)
+            success = False
+            failure_type = 'could not quit driver'
+            message = str(e)
     return success, failure_type, message, exceptions
 
 
