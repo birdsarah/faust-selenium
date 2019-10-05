@@ -33,7 +33,7 @@ loading into the browser. (See OpenWPM repo for info on installation)
 
 On a fresh node
 
-    sudo apt install -y git default-jdk tmux
+    sudo apt install -y git default-jdk tmux xvfb libdbus-glib-1-2
     git clone https://github.com/birdsarah/faust-selenium.git
     wget https://www-us.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz
     tar xzvf kafka_2.12-2.3.0.tgz
@@ -65,6 +65,7 @@ Crawler
     mv firefox firefox-bin
     rm target.tar.bz2
     gsutil cp <location-of-xpi> .
+    xvfb :99 &
     supervisord -c ...
 
 
