@@ -29,9 +29,34 @@ Install firefox and get openwpm extension - need unbranded Firefox in a
 firefox-bin directory under crawler and openwpm.xpi in the same place for
 loading into the browser. (See OpenWPM repo for info on installation)
 
+### Detailed instructions for GCE 
 
-ToDo:
-* RocksDB dependency should be optional - investigate
+On a fresh node
+
+    sudo apt install -y git 
+    git clone https://github.com/birdsarah/faust-selenium.git
+    wget https://www-us.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz
+    tar xzvf kafka_2.12-2.3.0.tgz
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
+    bash ~/miniconda.sh -b -p $HOME/miniconda
+    ./miniconda/bin/conda init
+    source ~/.bashrc
+    cd faust-selenium
+    conda env create -f environment.yaml
+    conda activate faust-selenium
+
+Zookeeper and kafka (update supervisord conf files depending on cluster config)
+
+    cd kafka
+    supervisord -c kafka.conf (or as appropriate)
+
+
+
+
+---
+
+## ToDo
+
 * When unbranded firefox is available on conda-forge, use it
 * Package
-* Ability to have multiple websocket workers so crawlers can talk to their own
+
