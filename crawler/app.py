@@ -50,6 +50,7 @@ class CrawlLog(faust.Record, serializer='json'):
 class WebExtStart(faust.Record, serializer='json'):
     visit_id: str
     crawl_id: str
+    time_stamp: str
 
 
 class WebExtJavascript(faust.Record, serializer='json'):
@@ -277,9 +278,9 @@ class KafkaLogHandler(logging.StreamHandler):
 app_settings = dict(
     broker=BROKER,
     producer_max_request_size=MAX_MESSAGE_SIZE,
+    consumer_max_fetch_size=MAX_MESSAGE_SIZE,
     store=STORE,
-    broker_commit_every=1,
-    stream_publish_on_commit=True,
+    process_guarantee="exactly_once",
 )
 app = faust.App(APPNAME, **app_settings)
 crawl_request_topic = app.topic(f'{APPNAME}-crawl-request', value_type=CrawlRequest)

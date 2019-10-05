@@ -147,8 +147,8 @@ class Websockets(Service):
 app_settings = dict(
     broker=BROKER,
     producer_max_request_size=MAX_MESSAGE_SIZE,
+    consumer_max_fetch_size=MAX_MESSAGE_SIZE,
     store=STORE,
-    broker_commit_every=50,
-    stream_publish_on_commit=True,
+    process_guarantee="exactly_once",
 )
 app = WSApp(APPNAME, **app_settings)

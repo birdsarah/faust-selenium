@@ -8,7 +8,6 @@ import configure_firefox
 from app import (
     BROWSER_PARAMS_FILE,
     MANAGER_PARAMS,
-    logger,
 )
 
 
@@ -18,6 +17,8 @@ LOG_FILE = os.environ.get('GECKODRIVER_LOG_FILE', 'geckodriver.log')
 
 
 def get_driver(visit_id, crawl_id, ws_port):
+    logs = []
+
     root_dir = os.path.dirname(os.path.abspath(__file__))
 
     browser_params = json.loads(open(BROWSER_PARAMS_FILE).read())
@@ -40,20 +41,20 @@ def get_driver(visit_id, crawl_id, ws_port):
     # Set custom prefs. These are set after all of the default prefs to allow
     # our defaults to be overwritten.
     for name, value in browser_params['prefs'].items():
-        logger.info(f"OPENWPM: Setting custom preference: {name} = {value}")
+        logs.append(f"OPENWPM: Setting custom preference: {name} = {value}")
         fo.set_preference(name, value)
 
     # Set the binary
     binary_path = MANAGER_PARAMS['firefox_binary_path']
     fo.binary = binary_path
-    logger.info(f"OPENWPM: Browser Binary Path {binary_path}")
+    logs.append(f"OPENWPM: Browser Binary Path {binary_path}")
 
     # Launch the webdriver
     driver = webdriver.Firefox(options=fo, service_log_path=LOG_FILE)
 
     # Get profile
     profile_path = driver.capabilities['moz:profile']
-    logger.info(f"OPENWPM: Browser Profile Path {profile_path}")
+    logs.append(f"OPENWPM: Browser Profile Path {profile_path}")
 
     # Set window size
     driver.set_window_size(*DEFAULT_SCREEN_RES)
@@ -71,6 +72,6 @@ def get_driver(visit_id, crawl_id, ws_port):
     ext_loc = os.path.join(root_dir, 'openwpm.xpi')
     ext_loc = os.path.normpath(ext_loc)
     driver.install_addon(ext_loc, temporary=True)
-    logger.info("OPENWPM: OpenWPM Firefox extension loaded")
+    logs.append("OPENWPM: OpenWPM Firefox extension loaded")
 
-    return driver
+    return driver, logs
