@@ -14,4 +14,4 @@ dependencies:
     - supervisor
     - websockets
     - pip:
-        - "faust[dbrocks]"
+        - "faust[dbrocks]"==1.7.4
