@@ -69,8 +69,14 @@ Crawler
     supervisord -c ...
 
 
+### Windows notes
 
-
+What's currently working:
+* kafka works on windows, start manually (not with supervisor) - https://kafka.apache.org/quickstart
+* to run with supervisor need cygwin, can't get anaconda to run in cygwin so:
+  * manually install geckodriver and set `geckodriver_executable`
+  * manually install firefox and set `firefox_binary_path`
+  * use venv and then `pip install selenium websockets faust supervisor pytz'
 
 
 ---
@@ -136,3 +142,5 @@ Notes
 * Kafka - Can only parallelize for as many partitions as you have, so if you want to have 100 crawlers, make sure the crawl_request topic has 100 partitions.
 * Content storage - must also have http instrumentation set to true
 * Saving content causes instability - causes websocket to error on large files
+
+
