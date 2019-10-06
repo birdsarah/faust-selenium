@@ -81,6 +81,8 @@ Crawler
 * Package
 * Add a check on start-up for critical parameters and fail out early
 * Add retries to crawl request and retry on crawl fail
+* Examine failures that do not result in a result being set. 
+  See parallel-16 crawl - is it unhandled exception from setting up driver?
 
 
 ---
