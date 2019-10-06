@@ -23,7 +23,7 @@ linux_cloud_params = dict(
     display=':99',
 )
 osx_params = dict(
-    firefox_binary_path='/Users/caged/Dev/birdsarah/faust-selenium/Nightly.app/Contents/MacOS/firefox-bin',
+    firefox_binary_path='/Users/caged/Dev/birdsarah/faust-selenium/app/Nightly.app/Contents/MacOS/firefox-bin',
     extension_path='/Users/caged/Dev/birdsarah/faust-selenium/app/openwpm.xpi',
     crawl_name_base='platform-comp-test-osx-local',
     database_name_base='data/platform-test-osx-local',
@@ -43,7 +43,7 @@ def render():
         n_crawlers=3,
         n_parallel=1,
         site_list='lists/alexatop1k.csv',
-        **win_params
+        **osx_params
     )
     print(result)
 
