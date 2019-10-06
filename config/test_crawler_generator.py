@@ -40,9 +40,9 @@ def render():
         browser_params_file='config/browser_params.json',
         manager_params_file='config/manager_params.json',
         n_crawlers=3,
-        p='test',
+        n_parallel=1,
         site_list='lists/alexatop1k.csv',
-        **win_params
+        **linux_cloud_params
     )
     print(result)
 
