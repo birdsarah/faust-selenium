@@ -1,7 +1,9 @@
 {% include 'supervisor_block' %}
 
 
+{#
 {% for p in range(1, n_parallel+1) %}
+#}
 
 ## Parallel crawler {{p}}
 
@@ -18,4 +20,6 @@
     {% endfor %}
     {% include 'producer_block' %}
 
+{#
 {% endfor %}
+#}
