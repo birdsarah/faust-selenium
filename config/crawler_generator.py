@@ -6,6 +6,7 @@ win_params = dict(
     extension_path="C:\\Users\\Bird\\openwpm.xpi",
     crawl_name_base='platform-comp-1-win-local',
     database_name_base='data/platform-1-win-local',
+    geckodriver_executable='geckodriver.exe',
 )
 linux_local_params = dict(
     firefox_binary_path='/home/bird/Dev/birdsarah/faust-selenium/app/firefox-bin/firefox-bin',
@@ -22,7 +23,7 @@ linux_cloud_params = dict(
     display=':99',
 )
 osx_params = dict(
-    firefox_binary_path='/Users/caged/Dev/birdsarah/faust-selenium/Nightly.app/Contents/MacOS/firefox-bin',
+    firefox_binary_path='/Users/caged/Dev/birdsarah/faust-selenium/app/Nightly.app/Contents/MacOS/firefox-bin',
     extension_path='/Users/caged/Dev/birdsarah/faust-selenium/app/openwpm.xpi',
     crawl_name_base='platform-comp-1-osx-local',
     database_name_base='data/platform-1-osx-local',
@@ -42,7 +43,7 @@ def render():
         n_crawlers=3,
         n_parallel=1,
         site_list='lists/alexatop1k.csv',
-        **osx_params
+        **linux_cloud_params
     )
     print(result)
 
