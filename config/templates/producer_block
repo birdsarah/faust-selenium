@@ -4,6 +4,5 @@ priority=300
 stdout_logfile=logs/crawler_{{p}}/producer_out.log
 stderr_logfile=logs/crawler_{{p}}/producer_err.log
 environment=
-    MANAGER_PARAMS_FILE="{{ manager_params_file }}",
     CRAWL_NAME="{{crawl_name_base}}-{{p}}",
     DATABASE_NAME="{{database_name_base}}-{{p}}.sqlite",

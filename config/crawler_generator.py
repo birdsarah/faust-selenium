@@ -18,11 +18,11 @@ def render():
         firefox_binary_path=FIREFOX_BINARY_PATH,
         extension_path=EXTENSION_PATH,
         site_list='lists/alexatop1k.csv',
-        crawl_name_base='gcp-parallel-whead-kafka',
-        database_name_base='data/crawl-data',
+        crawl_name_base='platform-comp-1-linux-local',
+        database_name_base='data/platform-1-linux-local',
         display=':99',
-        n_crawlers=1,
-        n_parallel=16,
+        n_crawlers=3,
+        n_parallel=1,
     )
     print(result)
 

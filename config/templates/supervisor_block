@@ -2,6 +2,7 @@
 nodaemon=true
 environment=
     PYTHONPATH="$PYTHONPATH:crawler",
+    MANAGER_PARAMS_FILE="{{ manager_params_file }}",
     {% if browser_params_file %}
     BROWSER_PARAMS_FILE="{{ browser_params_file }}",
     {% endif %}

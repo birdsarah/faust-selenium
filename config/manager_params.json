@@ -3,7 +3,7 @@
     "database_name": "data/crawl-data.sqlite",
     "testing": false,
     "dwell_time": 10,
-    "timeout": 20,
+    "timeout": 60,
     "kafka_broker": [
         "kafka://localhost:9092",
         "kafka://localhost:9093",
