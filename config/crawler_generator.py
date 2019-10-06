@@ -1,11 +1,9 @@
-import os
 from jinja2 import Environment, FileSystemLoader
 
-def log(path):
-    return os.path.join('logs', 'crawler', path)
 
-FIREFOX_BINARY_PATH = "/home/bird/Dev/birdsarah/faust-selenium/app/firefox-bin/firefox-bin"
-EXTENSION_PATH = "/home/bird/Dev/birdsarah/faust-selenium/app/openwpm.xpi"
+FIREFOX_BINARY_PATH = "/home/sbird/faust-selenium/app/firefox-bin/firefox-bin"
+EXTENSION_PATH = "/home/sbird/faust-selenium/app/openwpm.xpi"
+
 
 def render():
     e = Environment(
@@ -17,11 +15,14 @@ def render():
     result = t.render(
         browser_params_file='config/browser_params.json',
         manager_params_file='config/manager_params.json',
-        geckodriver_log_file=log('geckodriver.log'),
         firefox_binary_path=FIREFOX_BINARY_PATH,
         extension_path=EXTENSION_PATH,
-        #display=':99',
-        n_crawlers=2,
+        site_list='lists/alexatop1k.csv',
+        crawl_name_base='gcp-parallel-whead-kafka',
+        database_name_base='data/crawl-data',
+        display=':99',
+        n_crawlers=1,
+        n_parallel=16,
     )
     print(result)
 
