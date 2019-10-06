@@ -14,10 +14,10 @@ def render():
     t = e.get_template('datasaver')
     result = t.render(
         manager_params_file='config/manager_params.json',
-        crawl_name_base='gcp-parallel-whead-kafka',
+        crawl_name_base='gcp-parallel-whead-kafka-2',
         database_name_base='data/crawl-data',
         n_crawlers=1,
-        n_parallel=16,
+        n_parallel=12,
     )
     print(result)
 
