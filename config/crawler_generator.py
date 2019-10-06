@@ -8,10 +8,17 @@ win_params = dict(
     database_name_base='data/platform-1-win-local',
 )
 linux_local_params = dict(
-    firefox_binary_path='/home/sbird/faust-selenium/app/firefox-bin/firefox-bin',
-    extension_path='/home/sbird/faust-selenium/app/openwpm.xpi',
+    firefox_binary_path='/home/bird/Dev/birdsarah/faust-selenium/app/firefox-bin/firefox-bin',
+    extension_path='/home/bird/Dev/birdsarah/faust-selenium/app/openwpm.xpi',
     crawl_name_base='platform-comp-1-linux-local',
     database_name_base='data/platform-1-linux-local',
+    display=':99',
+)
+linux_cloud_params = dict(
+    firefox_binary_path='/home/sbird/faust-selenium/app/firefox-bin/firefox-bin',
+    extension_path='/home/sbird/faust-selenium/app/openwpm.xpi',
+    crawl_name_base='platform-comp-1-linux-cloud',
+    database_name_base='data/platform-1-linux-cloud',
     display=':99',
 )
 
