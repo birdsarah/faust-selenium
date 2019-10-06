@@ -21,6 +21,12 @@ linux_cloud_params = dict(
     database_name_base='data/platform-1-linux-cloud',
     display=':99',
 )
+osx_params = dict(
+    firefox_binary_path='/Users/caged/Dev/birdsarah/faust-selenium/Nightly.app/Contents/MacOS/firefox-bin',
+    extension_path='/Users/caged/Dev/birdsarah/faust-selenium/app/openwpm.xpi',
+    crawl_name_base='platform-comp-1-osx-local',
+    database_name_base='data/platform-1-osx-local',
+)
 
 
 def render():
@@ -36,7 +42,7 @@ def render():
         n_crawlers=3,
         n_parallel=1,
         site_list='lists/alexatop1k.csv',
-        **linux_local_params
+        **osx_params
     )
     print(result)
 
