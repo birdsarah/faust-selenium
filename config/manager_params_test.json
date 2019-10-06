@@ -1,6 +1,4 @@
 {
-    "crawl_name": "gcp-parallel-whead-kafka-test",
-    "database_name": "data/crawl-data-test.sqlite",
     "testing": false,
     "dwell_time": 10,
     "timeout": 60,

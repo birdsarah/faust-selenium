@@ -1,5 +1,9 @@
-[program:datasaver]
-command=faust -A crawler.datasaver.sqlite worker -p 6062
+[program:datasaver-{{p}}]
+command=faust -A crawler.datasaver.sqlite worker -p 6{{p}}62
 priority=100
-stdout_logfile=logs/crawler/datasaver_out.log
-stderr_logfile=logs/crawler/datasaver_err.log
+stdout_logfile=logs/crawler_{{p}}/datasaver_out.log
+stderr_logfile=logs/crawler_{{p}}/datasaver_err.log
+environment=
+    MANAGER_PARAMS_FILE="{{ manager_params_file }}",
+    CRAWL_NAME="{{crawl_name_base}}-{{p}}",
+    DATABASE_NAME="{{database_name_base}}-{{p}}.sqlite",
