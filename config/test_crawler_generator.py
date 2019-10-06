@@ -42,7 +42,7 @@ def render():
         n_crawlers=3,
         p='test',
         site_list='lists/alexatop1k.csv',
-        **osx_params
+        **win_params
     )
     print(result)
 
