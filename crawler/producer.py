@@ -17,7 +17,7 @@ CRAWL_ID = APPNAME
 
 @app.task
 async def producer():
-    with open('../lists/alexatop1k.csv', 'r') as f:
+    with open(get_manager_config('site_list'), 'r') as f:
         reader = csv.reader(f)
         sites = [item for sublist in list(reader) for item in sublist]
 

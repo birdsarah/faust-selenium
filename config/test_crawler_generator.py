@@ -11,7 +11,7 @@ def render():
         trim_blocks=True,
         lstrip_blocks=True,
     )
-    t = e.get_template('test_crawler')
+    t = e.get_template('crawler')
     result = t.render(
         browser_params_file='config/browser_params.json',
         manager_params_file='config/manager_params_test.json',
