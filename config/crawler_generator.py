@@ -1,8 +1,19 @@
 from jinja2 import Environment, FileSystemLoader
 
 
-FIREFOX_BINARY_PATH = "C:\\Users\\Bird\\firefox-bin\\firefox.exe"
-EXTENSION_PATH = "C:\\Users\\Bird\\openwpm.xpi"
+win_params = dict(
+    firefox_binary_path="C:\\Users\\Bird\\firefox-bin\\firefox.exe",
+    extension_path="C:\\Users\\Bird\\openwpm.xpi",
+    crawl_name_base='platform-comp-1-win-local',
+    database_name_base='data/platform-1-win-local',
+)
+linux_local_params = dict(
+    firefox_binary_path='/home/sbird/faust-selenium/app/firefox-bin/firefox-bin',
+    extension_path='/home/sbird/faust-selenium/app/openwpm.xpi',
+    crawl_name_base='platform-comp-1-linux-local',
+    database_name_base='data/platform-1-linux-local',
+    display=':99',
+)
 
 
 def render():
@@ -15,13 +26,10 @@ def render():
     result = t.render(
         browser_params_file='config/browser_params.json',
         manager_params_file='config/manager_params.json',
-        firefox_binary_path=FIREFOX_BINARY_PATH,
-        extension_path=EXTENSION_PATH,
-        site_list='lists/alexatop1k.csv',
-        crawl_name_base='platform-comp-1-win-local',
-        database_name_base='data/platform-1-win-local',
         n_crawlers=3,
         n_parallel=1,
+        site_list='lists/alexatop1k.csv',
+        **linux_local_params
     )
     print(result)
 
