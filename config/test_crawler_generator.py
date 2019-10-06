@@ -6,6 +6,7 @@ win_params = dict(
     extension_path="C:\\Users\\Bird\\openwpm.xpi",
     crawl_name_base='platform-comp-test-win-local',
     database_name_base='data/platform-test-win-local',
+    geckodriver_executable='geckodriver.exe',
 )
 linux_local_params = dict(
     firefox_binary_path='/home/bird/Dev/birdsarah/faust-selenium/app/firefox-bin/firefox-bin',
@@ -42,7 +43,7 @@ def render():
         n_crawlers=3,
         n_parallel=1,
         site_list='lists/alexatop1k.csv',
-        **linux_cloud_params
+        **win_params
     )
     print(result)
 
