@@ -1,6 +1,10 @@
 {
+    "browser_params_file": "config\\browser_params.json",
     "crawl_name": "openwpm",
-    "database_name": "data/crawl-data.sqlite",
+    "database_name": "data\\crawl-data.sqlite",
+    "firefox_binary_path": "C:\\Users\\Bird\\firefox-bin\\firefox.exe",
+    "extension_path": "C:\\Users\\Bird\\openwpm.xpi",
+    "site_list": "lists\\alexatop1k.csv",
     "testing": false,
     "dwell_time": 10,
     "timeout": 60,
@@ -9,5 +13,6 @@
         "kafka://localhost:9093",
         "kafka://localhost:9094"
     ],
-    "store": "rocksdb://"
+    "store": "rocksdb://",
+    "geckodriver_log_file": "logs\\crawler_1\\geckodriver.log"
 }

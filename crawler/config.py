@@ -1,6 +1,10 @@
 import json
 import os
 
+import os
+os.environ['MANAGER_PARAMS_FILE'] = os.path.join('config', 'manager_params.json')
+
+
 MANAGER_PARAMS_FILE = os.environ.get('MANAGER_PARAMS_FILE', None)
 if MANAGER_PARAMS_FILE is None:
     raise RuntimeError('MANAGER_PARAMS_FILE must be in environment')

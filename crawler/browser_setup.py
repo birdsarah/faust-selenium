@@ -44,7 +44,11 @@ def get_driver(visit_id, crawl_id, ws_port):
     binary_path = get_manager_config('firefox_binary_path')
     assert os.path.exists(binary_path), f'Binary not found at: {binary_path}'
     fo.binary = binary_path
-    logs.append(f"OPENWPM: Browser Binary Path {binary_path}")
+    print(f"OPENWPM: Browser Binary Path {binary_path}")
+
+    # Set geckodriver
+    geckodriver_executable = get_manager_config('geockodriver_executable', 'geckodriver.exe')
+    fo.executable_path = geckodriver_executable
 
     # Launch the webdriver
     driver = webdriver.Firefox(options=fo, service_log_path=LOG_FILE)
