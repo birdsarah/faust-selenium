@@ -12,6 +12,7 @@ from app import (
     crawl_request_log_topic,
     CrawlRequest,
 )
+from config import get_manager_config
 
 CRAWL_ID = APPNAME
 
