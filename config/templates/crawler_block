@@ -8,7 +8,7 @@ environment=
     MANAGER_PARAMS_FILE="{{ manager_params_file }}",
     CRAWL_NAME="{{crawl_name_base}}-{{p}}",
     DATABASE_NAME="{{database_name_base}}-{{p}}.sqlite",
-    GECKODRIVER_LOG_NAME="logs/crawler_{{p}}/geckodriver.log"
+    GECKODRIVER_LOG_FILE="logs/crawler_{{p}}/geckodriver.log"
 [program:websocket-{{p}}-{{n}}]
 command=faust -A crawler.websocket worker -p 6{{p}}9{{n}}
 stdout_logfile=logs/crawler_{{p}}/ws{{n}}_out.log
@@ -18,4 +18,4 @@ environment=
     MANAGER_PARAMS_FILE="{{ manager_params_file }}",
     CRAWL_NAME="{{crawl_name_base}}-{{p}}",
     DATABASE_NAME="{{database_name_base}}-{{p}}.sqlite",
-    GECKODRIVER_LOG_NAME="logs/crawler_{{p}}/geckodriver.log"
+    GECKODRIVER_LOG_FILE="logs/crawler_{{p}}/geckodriver.log"

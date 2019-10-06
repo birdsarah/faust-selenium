@@ -6,4 +6,4 @@ environment=
     MANAGER_PARAMS_FILE="{{ manager_params_file }}",
     CRAWL_NAME="{{crawl_name_base}}-{{p}}",
     DATABASE_NAME="{{database_name_base}}-{{p}}.sqlite",
-    GECKODRIVER_LOG_NAME="logs/crawler_{{p}}/geckodriver.log"
+    GECKODRIVER_LOG_FILE="logs/crawler_{{p}}/geckodriver.log"
