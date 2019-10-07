@@ -1,6 +1,15 @@
 {% include 'supervisor_block' %}
 
 
+{% if display %}
+[program:xvfb]
+command=Xvfb :99 &
+priority=10
+stdout_logfile=logs/display_out.log
+stderr_logfile=logs/display_err.log
+{% endif %}
+
+
 {% for p in range(1, n_parallel+1) %}
 
 ## Parallel crawler {{p}}
