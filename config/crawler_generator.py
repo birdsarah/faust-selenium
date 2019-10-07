@@ -4,29 +4,29 @@ from jinja2 import Environment, FileSystemLoader
 win_params = dict(
     firefox_binary_path="C:\\Users\\Bird\\firefox-bin\\firefox.exe",
     extension_path="C:\\Users\\Bird\\openwpm.xpi",
-    crawl_name_base='platform-comp-3-win-local',
-    database_name_base='data/platform-3-win-local',
+    crawl_name_base='platform-comp-4-win-local',
+    database_name_base='data/platform-4-win-local',
     geckodriver_executable='geckodriver.exe',
 )
 linux_local_params = dict(
     firefox_binary_path='/home/bird/Dev/birdsarah/faust-selenium/app/firefox-bin/firefox-bin',
     extension_path='/home/bird/Dev/birdsarah/faust-selenium/app/openwpm.xpi',
-    crawl_name_base='platform-comp-3-linux-local',
-    database_name_base='data/platform-3-linux-local',
+    crawl_name_base='platform-comp-4-linux-local',
+    database_name_base='data/platform-4-linux-local',
     display=':99',
 )
 linux_cloud_params = dict(
     firefox_binary_path='/home/sbird/faust-selenium/app/firefox-bin/firefox-bin',
     extension_path='/home/sbird/faust-selenium/app/openwpm.xpi',
-    crawl_name_base='platform-comp-3-linux-cloud',
-    database_name_base='data/platform-3-linux-cloud',
+    crawl_name_base='platform-comp-4-linux-cloud',
+    database_name_base='data/platform-4-linux-cloud',
     display=':99',
 )
 osx_params = dict(
     firefox_binary_path='/Users/caged/Dev/birdsarah/faust-selenium/app/Nightly.app/Contents/MacOS/firefox-bin',
     extension_path='/Users/caged/Dev/birdsarah/faust-selenium/app/openwpm.xpi',
-    crawl_name_base='platform-comp-3-osx-local',
-    database_name_base='data/platform-3-osx-local',
+    crawl_name_base='platform-comp-4-osx-local',
+    database_name_base='data/platform-4-osx-local',
 )
 
 
@@ -43,7 +43,7 @@ def render():
         n_crawlers=3,
         n_parallel=1,
         site_list='lists/alexatop1k.csv',
-        **win_params
+        **osx_params
     )
     print(result)
 
